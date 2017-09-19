@@ -1,0 +1,80 @@
+IEEE std. 830
+
+Sections
+	I.   Introduction
+		An introduction to section I.
+		I.I   Purpose
+			* To give a detailed description of requirements
+			* Identify who the audience for the document is
+			* Identify who approves the document
+		I.II  Scope
+			* Identify the product (by name)
+			* Explain what it does.
+			* Explain what it doesn't do.
+			* The benefits of this software.
+		I.III Definitions, Acronyms and Abbreviations
+			* Define any technical words, acronyms or abbreviations
+				you will use.
+			* Don't overuse acronyms (Use them wisely).
+		I.IV  References
+			* Works you have referred to.
+				* Title
+				* Author
+				* Publication (Source)
+				* Date
+		I.V   Overview
+			* Brief summary of contents of other sections
+			* Might be helpful to write after everything else is
+				written.
+	II.  The Overall Description
+		An introduction to section II.
+		II.I   Product Perspective
+			* How is your product related to other products in the
+				field (if they exist)
+			* How is your product related to other systems?
+			* If your project is a part of a bigger system, how does
+				it relate to the project as a whole? (Consider a
+				block diagram of the system.)
+			II.I.I    System Interfaces
+			II.I.II   Interfaces
+					* Pictures of possible interfaces
+			II.I.III  Hardware Interfaces
+			II.I.IV   Software Interfaces
+			II.I.V    Communication Interfaces
+			II.I.VI   Memory Constraints
+			II.I.VII  Operations
+					* Specify normal/special operations required by
+						the user.
+					* Intervals of interactive/noninteractive
+						systems.
+			II.I.VIII Site Adaptation Requirements
+			Delete sections that don't apply, and re-enumerate those
+				that do
+		II.II  Product Functions
+			* Organize functions so as to minimize the amount of
+				back-references necessary.
+		II.III User Characteristics
+			* Different types of users
+				* What can they do differently?
+				* What can they do the same?
+		II.IV  Constraints
+		II.V   Assumptions and Dependancies
+		II.VI  Apportioning Requirements
+			* What requirements are put off till later?
+	III. Specific Requirements
+		* Contains software requirements at a level sufficent for the
+			designer to design a system that matches the
+			requirements, and for testers to test that the system
+			matches the requirements.
+		* Describe all inputs/outputs, as well as all functions provided
+			in response to an input, and those required for an output
+			* Unambiguous
+			* Consistent
+			* Ranked for importance/stability
+			* Verifiable
+			* Modifiable
+			* Tracable
+		* Maximize readability
+		* Don't over-constrain
+			* Don't require specific software, unless the customer
+		 			mandates it.
