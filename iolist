@@ -1,0 +1,67 @@
+* End Users (Student)
+	* Inputs
+		* Student ID number (for login)
+		* Student name
+			* Entered on first time login, stored in association with the ID
+				number
+		* (Clock in/out) Section student is here for help with.
+		* (Clock in/out) (Optional) Tutor student is getting help from.
+		* (Question/Answer) Student question.
+	* Outputs
+		* (Clock in/out) Notification of student status (logged in/out)
+		* (Clock in/out) Entry in database containing information about lab usage.
+			* Time/date
+			* User ID
+			* Section ID
+			* (Optional) Tutor ID
+		* (Question/Answer) Question posted to list of pending
+			questions.
+* Tutors
+	* Inputs
+		* (Login/Logout) Tutor ID number (for login)
+		* (Login/Logout) Tutor name
+			* Entered on first time login, stored in association with the ID
+				number
+		* (Scheduling) Tutor schedule
+		* (Question/Answer) Tutor contact information
+		* (Question/Answer) Response to question.
+	* Outputs
+		* (Login/Logout) Notification of tutor status (logged in/out)
+		* Entry in database containing information about lab usage.
+			* Time/date
+			* Tutor ID
+		* (Question/Answer) Notifications about pending questions.
+		* (Question/Answer) Responses added to student questions.
+			* Student question moved from pending to answered.
+* Administrators (Professors/Teachers)
+	* Inputs
+		* (Login/Logout) Teacher ID number 
+		* (Login/Logout) Teacher name
+			* Entered on first time login, stored in association
+				with the ID number.
+		* (Class Management) Add/Remove Sections
+			* (Optional) Associate department with section
+		* (User Management)  Add/Remove Tutors
+			* (Optional) Add/Remove sections from tutors
+		* (Statistics)       Request usage reports
+			* Per Section
+			* Per Tutor
+			* Per Student
+			* Overall
+	* Outputs
+		* (Login/Logout)     Mark teachers as logged in/logged out
+		* (Class Management) Make changes to section lists.
+		* (User Management)  Make changes to tutor lists.
+		* (Statistics) Provide requested reports
+			* Graphical
+			* (Optional) Tabular
+			* Raw Data
+* System Administrator
+	* Inputs
+		* (User Management) Add/Remove Teachers
+			* (Optional) Associate teacher with department
+			* (Optional) Mark teacher as department head
+		* (Class Management) Add/Remove Terms
+	* Outputs
+		* (User Management)  Make changes to teacher lists.
+		* (Class Management) Make changes to term lists. 
