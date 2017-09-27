@@ -8,20 +8,42 @@ create table supervisors (
 	primary key(supid)
 );
 
+create table terms (
+	-- Long enough for {Winter,Spring,Summer,Fall}YYY
+	tercode varchar(10),
+
+	primary key(tercode)
+)
+
+create table classes (
+	clasid serial,
+
+	term  varchar(10) NOT NULL,
+
+	name varchar(255)  NOT NULL,
+
+	primary key(clasid),
+	foreign key(term) references terms(tercode)
+);
+
 create table sections (
 	secid serial,
-	supid int          NOT NULL,
 
-	name  varchar(255) NOT NULL,
+	supid  int          NOT NULL,
+	clasid int          NOT NULL,
+
+	name  varchar(255)  NOT NULL,
 
 	primary key(secid),
-	foreign key(supid) references supervisors(supid)
+	foreign key(supid)  references supervisors(supid),
+	foreign key(clasid) references classes(clasid)
 );
 
 create table tutors (
 	tutid serial,
 
-	name varchar(255) NOT NULL,
+	name    varchar(255) NOT NULL,
+	contact varchar(255) NOT NULL,
 	
 	primary key(tutid)
 );

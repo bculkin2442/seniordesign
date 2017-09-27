@@ -78,3 +78,5 @@ Sections
 		* Don't over-constrain
 			* Don't require specific software, unless the customer
 				mandates it.
+		* Generally describe functions as "The system shall..."
+		* Response to abnormal situations.

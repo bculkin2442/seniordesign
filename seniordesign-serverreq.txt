@@ -1,0 +1,30 @@
+Senior Design Server Requirements by group:
+
+
+Adam Cantrell and Ben Culkin
+    Linux Server VM (CentOS)
+        Domain Name: 
+            labAssist.wvutech.edu
+        Requirements:
+            The following ports need to be open for access on and off campus:
+                22,80,443,3306,5432
+            
+
+
+Jared Miller and Lucas Darnell
+    Linux Server VM
+        DomainName:
+            techstart.wvutech.edu
+        Requirements:
+            The following ports need to be open for access on and off campus:
+                22,80,443,3306,5432
+
+
+
+Tellep and Kinsel
+    Windows Server VM
+        Domain Name:
+            airMaintain.wvutech.edu
+        Requirements:
+            The following ports need to be open for access on and off campus:
+                1433 3750
