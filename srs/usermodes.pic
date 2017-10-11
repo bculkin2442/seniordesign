@@ -1,0 +1,19 @@
+.PS
+StudentBox:  box "Student";
+TutorBox:    box "Tutor";
+StaffBox:    box "Staff";
+AdminBox:    box "Administrator";
+SysAdminBox: box "System" "Administrator";
+down; move; move;
+left; move; move;
+UserBox:  box "User"  "Mode";
+move; move;
+KioskBox: box "Kiosk" "Mode";
+arrow from StudentBox.s  to KioskBox.n;
+arrow from TutorBox.s    to KioskBox.n;
+arrow from StudentBox.s  to UserBox.n;
+arrow from TutorBox.s    to UserBox.n;
+arrow from StaffBox.s    to UserBox.n;
+arrow from AdminBox.s    to UserBox.n;
+arrow from SysAdminBox.s to UserBox.n;
+.PE

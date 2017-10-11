@@ -1,63 +1,65 @@
 Features:
-    Login/Logout (All)
-        -Students Select class's that they are seeking help in
-        -Clock the time and Day of student arrival and departure
-            --Failure to clock out will set the leave time to 11:59pm on the same day to indicate logout failure
-        -Can See tutor availability (Lab Schedule).
-
-    Question and Answer System (Students, Tutors and Staff)
-        - Students Can query tutors for answers to questions
-            -Tutors receive email alerts for new questions
-            -Tutors can reply to student questions
-                --Must loginto system to respond
-
-    Statistical Reporting (Staff and Administrators)
-        - Statistical charts to depict the following cases
-            -Time and days most utilized
-            -Utilization per class
-            -Utilization per professor
-                --Accessable only by administrators
-
-    Tutor Scheduling    (Tutor Only)
-        -Allow tutors to specify times that they are available for tutoring
-            --STRETCH GOAL
-                --System assigns lab times based on tutor availability. 
-    
-
+	Login/Logout (All)
+		- Two modes
+		- Kiosk (Students/Tutors)
+			- Authenticate with Student ID no.
+				- On first time usage, enter real name.
+			- Select the class they need help with/are helping with.
+			- Record the time/date of arrival/departure
+				- If a departure is not recorded for a clockout,
+				  one will be generated at 11:59 to indicate a
+				  failure to do so.
+		- User (All)
+			- Authenticate with username/password.
+			- Access all other functionality.
+	Scheduling (Students/Tutors/Staff)
+		- Students can view tutor schedules
+		- Tutors can register when they are available to tutor
+		- Staff can arrange tutors into a schedule
+			- STRETCH: Automatically schedule tutors based off of
+			  availability, and demand for tutors.
+	Question and Answer System (Students, Tutors and Staff)
+		- Must be in User Mode
+		- Students
+			- Ask questions
+			- See pending/answered questions
+			- Recieve email alerts when a question is answered
+		- Tutors/Staff
+		  	- Answer questions
+			- See question awaiting answers
+			- Recieve email alerts for new questions
+	Statistical Reporting (Staff and Administrators)
+		- Statistical charts to depict the following cases
+			- Times Most Utilized
+			- Days Most Utilized
+			- Classes Most Utilized
+			- Administrator only reports
+				- Professors Most Utilized
 Roles:
-    Student
-        -Can login/logout
-            -Choose class needing help in.
-        -Can Ask questions to tutor/staff.
-
-    Tutor
-        -Can login/logout
-        -Can reply to student questions
-        -Can manually specify tutoring times
-    
-    Staff
-        -Can login/logout
-        -Can reply to student questions
-        -Can view statistics
-            -Can't see other professor's classes
-            -Can't see utilization report per professor
-        -Can Promote/Demote Tutor's
-        -Can add their own classes.
-    
-    Administrator
-        -All abilities of staff plus
-        -Can see other professor's classes
-        -Can see utilization report per professor
-        -Can promote/demote tutors and staff
-
-    SysAdmin
-        -Does not have permission to do anything except the following:
-            -Create terms
-            -Promote/demote Administrators
-            -Assign global bounds for tutor times.
-                -Example: Help labs cant have hours past X or before y.
-    
-
-        
-
-    
+	Student
+		- Can login/logout
+		- Choose class needing help in.
+		- Can Ask questions to tutor/staff.
+	Tutor
+		- Can login/logout
+		- Can reply to student questions
+		- Can manually specify tutoring times
+	Staff
+		- Can login/logout
+		- Can reply to student questions
+		- Can view statistics
+			- Can't see other professor's classes
+			- Can't see utilization report per professor
+		- Can Promote/Demote Tutor's
+		- Can add their own classes.
+	Administrator
+		- All abilities of staff plus
+			- Can see other professor's classes
+			- Can see utilization report per professor
+			- Can promote/demote students to tutors and create/delete staff
+	SysAdmin
+		- Does not have permission to do anything except the following:
+			- Create terms
+			- Promote/demote Administrators
+			- Assign global bounds for tutor times.
+			- Example: Help labs cant have hours past X or before y.
