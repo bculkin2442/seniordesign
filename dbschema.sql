@@ -28,16 +28,30 @@ create table users (
 	primary key(idno)
 );
 
+create type msgtype as enum (
+	-- @TODO 10/10/17 Ben Culkin :MsgTypes
+	-- 	Fill this in with the types of messages we need.
+);
+
 -- Pending message notifications that haven't been dispatched yet.
 create table pendingmsgs (
-	-- @TODO 10/10/17 Ben Culkin :MsgTable
-	-- 	Fill out this table once we know what needs to go here.
-	-- 	Open questions are:
-	-- 	- Does storing old messages serve any purposes?
-	-- 	- Should we store the entire body of the message, or just some
-	-- 		sort of list of data that we use to fill out a form
-	-- 		email before we send it. (This could be JSON, XML or
-	-- 		something else.)
+	msgid serial,
+
+	-- SQL standard array syntax.
+	--
+	-- @NOTE
+	-- 	Should this stay as an array, or should it be moved to a join
+	-- 	table or something, because the patch for array foreign keys
+	-- 	never seems to have been accepted.
+	recipient char(8) array NOT NULL,
+
+	mstype msgtype          NOT NULL,
+	body   text             NOT NULL,
+
+	primary key(msgid),
+
+	-- Uncomment this if we store the list of recipients in some other way.
+	--foreign key(recipient) references users(idno)
 );
 
 -- List of all classes that have ever been offered.
@@ -79,7 +93,7 @@ create table section_attends (
 	section int,
 
 	-- True if someone is a tutor, instead of a student
-	tutors boolean,
+	tutors boolean   NOT NULL,
 
 	-- @NOTE
 	-- 	A student can't tutor a class he is currently in.
@@ -89,14 +103,70 @@ create table section_attends (
 	foreign key(section) references sections(secid)
 );
 
+-- List of clock in/outs for lab usage.
+create table usage (
+	student char(8),
+	section int,
+	mark    timestamp,
+
+	-- True if this is a check in, false if it is a check out.
+	checkin boolean    NOT NULL,
+
+	-- @NOTE
+	-- 	Should section be a part of this?
+	primary key(student, section, mark),
+
+	foreign key(student) references users(idno),
+	foreign key(section) references sections(secid)
+);
+
+-- @NOTE
+-- 	For easy querying, the question/answer system has been split into two
+-- 	tables.
+-- 	- Questions
+-- 		One entry in this table exists for every question.
+-- 	- Posts
+-- 		One entry in this table exists for every question/answer to that
+-- 		question.
+
+create type question_status as enum (
+	awaiting_response,
+	answered
+);
+
+-- List of all asked questions
+create table questions (
+	quid serial,
+
+	title varchar(255)     NOT NULL,
+	asker char(8)          NOT NULL,
+
+	status question_status NOT NULL,
+
+	primary key(quid),
+
+	foreign key(asker) references users(idno)
+);
+
+-- List of all of the posts for questions
+create table posts (
+	postid   serial,
+	question int,
+
+	author char(8)      NOT NULL,
+	body   text         NOT NULL,
+
+	-- True if this post is a question, false if this quest is an answer
+	is_question boolean NOT NULL,
+
+	primary key(postid, question),
+
+	foreign key(question) references questions(quid),
+	foreign key(author)   references users(idno)
+);
 -- @TODO 10/10/17 Ben Culkin :DBSchema
 -- 	Pick up with the DB schema. The remaining things are:
--- 	- Questions (Question/Answer System)
---		Contains user questions/answers. How should the various states
---		of a question be handled? (Things like if a question/response is
---		pending and notifications need to be distributed)
--- 	- Usage     (Clock in/out)
---		Usage schedules of the labs.
+--
 -- 	- Schedule  (Clock in/out)
 --		Schedules of the tutor. Both availabilty and actual schedule
 --		need to be handled.
