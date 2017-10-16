@@ -164,9 +164,34 @@ create table posts (
 	foreign key(question) references questions(quid),
 	foreign key(author)   references users(idno)
 );
--- @TODO 10/10/17 Ben Culkin :DBSchema
--- 	Pick up with the DB schema. The remaining things are:
+
+-- List of which tutors are available, and for how long
+create table availability (
+	student   char(8),
+
+	starttime timestamp NOT NULL,
+	endtime   timestamp NOT NULL,
+
+	primary key(student, starttime),
+
+	foreign key(student) references users(idno)
+);
+
+-- List of when tutors are scheduled to be active
+create table schedules (
+	student char(8),
+	section int,
+
+	starttime timestamp NOT NULL,
+	endtime   timestamp NOT NULL,
+
+	primary key(student, section),
+
+	foreign key(student) references users(idno),
+	foreign key(section) references sections(secid)
+);
+-- @TODO 10/16/17 Ben Culkin :DBSchema
+--	Add constraints where appropriate to the schema.
 --
--- 	- Schedule  (Clock in/out)
---		Schedules of the tutor. Both availabilty and actual schedule
---		need to be handled.
+--	I'm consider using triggers for ensuring consistency on some of the
+--	tables, but not sure if that is how things should go.
