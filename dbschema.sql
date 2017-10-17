@@ -4,11 +4,11 @@
 
 -- All of the possible roles for users, put in order of increasing privileges.
 create type role as enum (
-	student,
-	tutor,
-	staff,
-	admin,
-	sysadmin
+	'student',
+	'tutor',
+	'staff',
+	'admin',
+	'sysadmin'
 );
 
 -- The users of the system.
@@ -48,7 +48,7 @@ create table pendingmsgs (
 	mstype msgtype          NOT NULL,
 	body   text             NOT NULL,
 
-	primary key(msgid),
+	primary key(msgid)
 
 	-- Uncomment this if we store the list of recipients in some other way.
 	--foreign key(recipient) references users(idno)
@@ -83,7 +83,7 @@ create table sections (
 	primary key(secid),
 
 	foreign key(class)   references classes(cid),
-	foreign key(term)    references terms(tid),
+	foreign key(term)    references terms(code),
 	foreign key(teacher) references users(idno)
 );
 
@@ -130,8 +130,8 @@ create table usage (
 -- 		question.
 
 create type question_status as enum (
-	awaiting_response,
-	answered
+	'awaiting_response',
+	'answered'
 );
 
 -- List of all asked questions
