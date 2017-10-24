@@ -31,27 +31,22 @@ create table users (
 create type msgtype as enum (
 	-- @TODO 10/10/17 Ben Culkin :MsgTypes
 	-- 	Fill this in with the types of messages we need.
+	'PENDING_QUESTION',
+	'SCHEDULE_CHANGED'
 );
 
 -- Pending message notifications that haven't been dispatched yet.
 create table pendingmsgs (
 	msgid serial,
 
-	-- SQL standard array syntax.
-	--
-	-- @NOTE
-	-- 	Should this stay as an array, or should it be moved to a join
-	-- 	table or something, because the patch for array foreign keys
-	-- 	never seems to have been accepted.
-	recipient char(8) array NOT NULL,
+	recipient char(8)       NOT NULL,
 
 	mstype msgtype          NOT NULL,
 	body   text             NOT NULL,
 
-	primary key(msgid)
+	primary key(msgid),
 
-	-- Uncomment this if we store the list of recipients in some other way.
-	--foreign key(recipient) references users(idno)
+	foreign key(recipient) references users(idno)
 );
 
 -- List of all classes that have ever been offered.
