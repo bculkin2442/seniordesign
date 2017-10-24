@@ -1,6 +1,7 @@
 package wvutech.mailer;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -22,20 +23,30 @@ public class Mailer {
 
 		Session sess = Session.getInstance(props, null);
 
-		try {
-			MimeMessage msg = new MimeMessage(sess);
+		/* Retrieve messages from the database. */
+		List<wvutech.mailer.Message> msgs = MessageGrabber.getMessages();
 
-			msg.setFrom("labassist@mail.wvu.edu");
-			msg.setRecipients(Message.RecipientType.TO, "agcantrell@mix.wvu.edu");
-			msg.setSubject("LabAssist Mailer Testing");
-			msg.setSentDate(new Date());
-			msg.setText("If you are seeing this, LabAssist's mailing system works.\n");
+		/* Batch messages together. */
+		MessageBatcher.batch(msgs);
 
-			Transport.send(msg, "labassist@mail.wvu.edu", "");
-		} catch (MessagingException mex) {
-			System.out.printf("Message send failed (reason %s)\n", mex.getMessage());
-			System.out.println();
-			mex.printStackTrace();
+		for(wvutech.mailer.Message msg : msgs) {
+			try {
+				MimeMessage mmsg = new MimeMessage(sess);
+
+				mmsg.setFrom("labassist@mail.wvu.edu");
+				for(String recip : msg.getRecipients()) {
+					mmsg.setRecipients(Message.RecipientType.TO, recip);
+				}
+				mmsg.setSubject(msg.type.getSubject());
+				mmsg.setSentDate(new Date());
+				mmsg.setText(msg.merge(msg.type.getBody()));
+
+				//Transport.send(mmsg, "labassist@mail.wvu.edu", "");
+			} catch (MessagingException mex) {
+				System.out.printf("Message send failed (reason %s)\n", mex.getMessage());
+				System.out.println();
+				mex.printStackTrace();
+			}
 		}
 	}
 }

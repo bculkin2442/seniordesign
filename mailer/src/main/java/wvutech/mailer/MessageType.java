@@ -17,5 +17,24 @@ public enum MessageType {
 	/**
 	 * A change has been made to a tutors schedule.
 	 */
-	SCHEDULE_CHANGED
+	SCHEDULE_CHANGED;
+
+	public String getSubject() {
+		switch(this) {
+		case PENDING_QUESTION:
+			return "[LabAssist] You have Pending Questions";
+		case SCHEDULE_CHANGED:
+			return "[LabAssist] Lab Schedule has Changed";
+		default:
+			return "[LabAssist] Notification";
+		}
+	}
+
+	public String getBody() {
+		/*
+		 * @TODO 10/24/17 Ben Culkin :MsgBody
+		 * 	Create message bodies in external files and load them.
+		 */
+		return "NO MESSAGE BODY";
+	}
 }
