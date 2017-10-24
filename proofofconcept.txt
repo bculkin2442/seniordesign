@@ -1,0 +1,5 @@
+- Identify each "key part" of your project
+
+- Address the areas that require attention at this point
+	- Write an application to show that it works
+	- Algorithm to do it (Perform necessary analysis)
