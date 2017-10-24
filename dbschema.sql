@@ -2,6 +2,9 @@
 -- 	An open question is what the policy for how to archive data that we
 -- 	don't need very often but still need to keep around should be.
 
+-- @TODO 10/24/17 Ben Culkin :SampleData
+-- 	Write something to generate sample data, probably using RGen
+
 -- All of the possible roles for users, put in order of increasing privileges.
 create type role as enum (
 	'student',
