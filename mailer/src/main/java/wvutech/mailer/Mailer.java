@@ -29,8 +29,10 @@ public class Mailer {
 		/* Batch messages together. */
 		MessageBatcher.batch(msgs);
 
+		int nmsg = 0;
 		for(wvutech.mailer.Message msg : msgs) {
 			try {
+				nmsg += 1;
 				MimeMessage mmsg = new MimeMessage(sess);
 
 				mmsg.setFrom("labassist@mail.wvu.edu");
@@ -41,7 +43,8 @@ public class Mailer {
 				mmsg.setSentDate(new Date());
 				mmsg.setText(msg.merge(msg.type.getBody()));
 
-				Transport.send(mmsg, "labassist@mail.wvu.edu", "");
+				System.out.printf("Sending msg %d:\n%s" , nmsg, msg);
+				//Transport.send(mmsg, "labassist@mail.wvu.edu", "");
 			} catch (MessagingException mex) {
 				System.out.printf("Message send failed (reason %s)\n", mex.getMessage());
 				System.out.println();

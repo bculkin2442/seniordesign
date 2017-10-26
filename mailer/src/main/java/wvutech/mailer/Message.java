@@ -31,6 +31,28 @@ public class Message {
 		vars       = new HashMap<>();
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("\tMsg. Type: ");
+		sb.append(type.toString());
+		sb.append("\n\tRecipients:\n");
+		for(String recip : recipients) {
+			sb.append("\t\t");
+			sb.append(recip);
+			sb.append("\n");
+		}
+		sb.append("\tBody vars:\n");
+		for(Map.Entry<String, String> var : vars.entrySet()) {
+			sb.append("\t\tname: '");
+			sb.append(var.getKey());
+			sb.append("'\tvarbody: '");
+			sb.append(var.getValue());
+			sb.append("'\n");
+		}
+		return sb.toString();
+	}
 	/**
 	 * Add a series of recipients to the message.
 	 *
@@ -39,7 +61,9 @@ public class Message {
 	 */
 	public void addRecipients(String... recipients) {
 		for(String recipient : recipients) {
-			this.recipients.add(recipient);
+			if(!this.recipients.contains(recipient)) {
+				this.recipients.add(recipient);
+			}
 		}
 	}
 
@@ -99,7 +123,7 @@ public class Message {
 		 * 	I'm not sure efficency is a real problem.
 		 */
 		for(Map.Entry<String, String> ent : vars.entrySet()) {
-			newBody.replaceAll(String.format("{%s}", ent.getKey()), ent.getValue());
+			newBody.replaceAll(String.format("\\{%s\\}", ent.getKey()), ent.getValue());
 		}
 		
 		return newBody;

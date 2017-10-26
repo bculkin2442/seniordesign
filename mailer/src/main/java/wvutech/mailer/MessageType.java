@@ -2,6 +2,7 @@ package wvutech.mailer;
 
 import java.io.InputStream;
 
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -35,7 +36,7 @@ public enum MessageType {
 	}
 
 	public String getBody() {
-		InputStream strem = this.getClass().getResourceAsStream(String.format("messages/%s.mbody", this.toString()));
+		InputStream strem = this.getClass().getResourceAsStream(String.format("/messages/%s.mbody", this.toString()));
 
 		StringBuilder sb = new StringBuilder();
 
@@ -46,5 +47,72 @@ public enum MessageType {
 		}
 
 		return sb.toString();
+	}
+
+	public void mergeVars(Map<String, String> src, Map<String, String> dest) {
+		switch(this) {
+		case PENDING_QUESTION:
+			{
+				String recipient  = src.get("recipient");
+				String nquestions = src.get("nquestions");
+				String questions  = src.get("questions");
+
+				if(recipient  == null) recipient  = "";
+				if(nquestions == null) nquestions = "0";
+				if(questions  == null) questions  = "";
+
+				dest.merge("recipient", recipient, (srcString, destString) -> {
+					if(srcString == null) {
+						if(destString == null) {
+							return "";
+						}
+
+						return destString;
+					} else if (destString == null) {
+						return srcString;
+					}
+
+					return String.format("%s ; %s", srcString, destString);
+				});
+
+				dest.merge("nquestions", nquestions, (srcString, destString) -> {
+					if(srcString == null) {
+						if(destString == null) {
+							return "0";
+						}
+
+						return destString;
+					} else if(destString == null) {
+						return srcString;
+					}
+
+					/*
+					 * @NOTE
+					 * this'll fail for improperly formatted
+					 * nquestion bvars.
+					 */
+					return String.format("%d", Integer.parseInt(srcString) + Integer.parseInt(destString));
+				});
+
+				dest.merge("questions", questions, (srcString, destString) -> {
+					if(srcString == null) {
+						if(destString == null) {
+							return "";
+						}
+
+						return destString;
+					} else if (destString == null) {
+						return srcString;
+					}
+
+					return String.format("%s\n%s", srcString, destString);
+				});
+			}
+			return;
+		case SCHEDULE_CHANGED:
+			return;
+		default:
+			return;
+		}
 	}
 }

@@ -35,27 +35,29 @@ public class MessageGrabber {
 					while(rs.next()) {
 						maxid = Math.max(maxid, rs.getInt("msgid"));
 						
-						String recipient = rs.getString("email");
-						String body      = rs.getString("body");
+						String recipient = rs.getString("email").trim();
+						String body      = rs.getString("body").trim();
 
 						MessageType type = MessageType.valueOf(rs.getString("mstype"));
 
 						Message msg = new Message(type);
 
 						msg.addRecipients(recipient);
-						for(String bvar : body.split(";")) {
-							int colIdx = bvar.indexOf(':');
+						if(!body.equals("")) {
+							for(String bvar : body.split(";")) {
+								int colIdx = bvar.indexOf(':');
 
-							if(colIdx == -1) {
-								System.out.printf("ERROR: improperly formatted body variable %s (missing :)\n", bvar);
+								if(colIdx == -1) {
+									System.out.printf("ERROR: improperly formatted body variable %s (missing :)\n", bvar);
 
-								continue;
+									continue;
+								}
+
+								String varName = bvar.substring(0, colIdx).trim();
+								String varBody = bvar.substring(colIdx + 1).trim();
+
+								msg.addVar(varName, varBody);
 							}
-
-							String varName = bvar.substring(0, colIdx).trim();
-							String varBody = bvar.substring(colIdx).trim();
-
-							msg.addVar(varName, varBody);
 						}
 
 						msgs.add(msg);

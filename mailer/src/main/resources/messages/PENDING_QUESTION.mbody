@@ -1,5 +1,6 @@
 {recipient},
-	There are {nquestions} questions waiting for you
+	There are {nquestions} questions waiting for you:
+
 {questions}
 
 	Log onto the system to view them.
