@@ -87,8 +87,9 @@
 						<id>mailerd</id>
 
 						<goals>
-							<goal>exec</exec>
+							<goal>exec</goal>
 						</goals>
+
 						<configuration>
 							<executable>java</executable>
 
