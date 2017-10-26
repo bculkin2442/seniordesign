@@ -22,7 +22,7 @@ public class MailerGen {
 
 	public static void main(String[] args) {
 		try {
-			InputStream is = this.getClass().getResourceAsStream("messages/PMSGS.mvars");
+			InputStream is = MailerGen.class.getResourceAsStream("messages/PMSGS.mvars");
 			Scanner scn = new Scanner(is);
 
 			Class.forName("org.postgresql.Driver");
@@ -41,7 +41,7 @@ public class MailerGen {
 
 				pmsgStmt.executeUpdate();
 
-				stmt.close();
+				pmsgStmt.close();
 			}
 		} catch (Exception ex) {
 			System.out.printf("Error accessing the database (reason %s)\n", ex.getMessage());
