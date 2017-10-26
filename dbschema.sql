@@ -23,6 +23,7 @@ create table users (
 	-- 	the primary.
 	idno char(8),
 
+	username varchar(255) NOT NULL,
 	realname varchar(255) NOT NULL,
 	email    varchar(255) NOT NULL,
 
