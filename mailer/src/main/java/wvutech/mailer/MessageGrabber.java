@@ -43,7 +43,7 @@ public class MessageGrabber {
 						Message msg = new Message(type);
 
 						msg.addRecipients(recipient);
-						for(String bvar : body.split("\n")) {
+						for(String bvar : body.split(";")) {
 							int colIdx = bvar.indexOf(':');
 
 							if(colIdx == -1) {

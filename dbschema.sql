@@ -16,12 +16,12 @@ create type role as enum (
 
 -- The users of the system.
 create table users (
-	-- Every user has an 8 char ID number from WVU.
+	-- Every user has an 9 char ID number from WVU.
 	--
 	-- @NOTE
 	-- 	If DB space becomes an issues, swap to using an integer key as
 	-- 	the primary.
-	idno char(8),
+	idno char(9),
 
 	username varchar(255) NOT NULL,
 	realname varchar(255) NOT NULL,

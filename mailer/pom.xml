@@ -16,6 +16,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<main.class>wvutech.mailer.Mailer</main.class>
+		<main.class1>wvutech.mailer.MailerGen</main.class1>
 	</properties>
 
 	<licenses>
@@ -86,10 +87,6 @@
 						<!-- Run the mailer -->
 						<id>mailerd</id>
 
-						<goals>
-							<goal>exec</goal>
-						</goals>
-
 						<configuration>
 							<executable>java</executable>
 
@@ -101,6 +98,25 @@
 							</arguments>
 
 							<mainClass>${main.class}</mainClass>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- 
+						Generate sample messages for the mailer 
+						-->
+						<id>mailer-gen</id>
+
+						<configuration>
+							<executable>java</executable>
+
+							<arguments>
+								<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n</argument>
+								<argument>-classpath</argument>
+								<classpath />
+								<argument>${main.class1}</argument>
+							</arguments>
+
+							<mainClass>${main.class1}</mainClass>
 						</configuration>
 					</execution>
 				</executions>
