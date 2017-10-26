@@ -22,13 +22,13 @@ public class MailerGen {
 
 	public static void main(String[] args) {
 		try {
-			InputStream is = MailerGen.class.getResourceAsStream("messages/PMSGS.mvars");
+			InputStream is = MailerGen.class.getResourceAsStream("/messages/PMSGS.mvars");
 			Scanner scn = new Scanner(is);
 
 			Class.forName("org.postgresql.Driver");
 			try(Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/labassist", "labassist", "labassist")) {
 				PreparedStatement pmsgStmt = c.prepareStatement(PMSG_INS_STMT);
-				
+
 				while(scn.hasNextLine()) {
 					String ln = scn.nextLine();
 
@@ -39,7 +39,7 @@ public class MailerGen {
 					pmsgStmt.addBatch();
 				}
 
-				pmsgStmt.executeUpdate();
+				pmsgStmt.executeBatch();
 
 				pmsgStmt.close();
 			}

@@ -122,6 +122,16 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>data/</directory>
+				<includes>
+					<include>**/*.mbody</include>
+					<include>**/*.mvars</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 	<dependencies>
