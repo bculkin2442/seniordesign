@@ -1,4 +1,4 @@
-package wvutech.Mailer;
+package wvutech.mailer;
 
 import java.io.InputStream;
 
