@@ -1,5 +1,9 @@
 package wvutech.mailer;
 
+import java.io.InputStream;
+
+import java.util.Scanner;
+
 /**
  * Represents the various types of messages that can be sent.
  *
@@ -31,10 +35,16 @@ public enum MessageType {
 	}
 
 	public String getBody() {
-		/*
-		 * @TODO 10/24/17 Ben Culkin :MsgBody
-		 * 	Create message bodies in external files and load them.
-		 */
-		return "NO MESSAGE BODY";
+		InputStream strem = this.getClass().getResourceAsStream(String.format("messages/%s.mbody", this.toString()));
+
+		StringBuilder sb = new StringBuilder();
+
+		Scanner scn = new Scanner(strem);
+
+		while(scn.hasNextLine()) {
+			sb.append(scn.nextLine());
+		}
+
+		return sb.toString();
 	}
 }

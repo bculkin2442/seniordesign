@@ -41,7 +41,7 @@ public class Mailer {
 				mmsg.setSentDate(new Date());
 				mmsg.setText(msg.merge(msg.type.getBody()));
 
-				//Transport.send(mmsg, "labassist@mail.wvu.edu", "");
+				Transport.send(mmsg, "labassist@mail.wvu.edu", "");
 			} catch (MessagingException mex) {
 				System.out.printf("Message send failed (reason %s)\n", mex.getMessage());
 				System.out.println();

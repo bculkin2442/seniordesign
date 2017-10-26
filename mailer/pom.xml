@@ -38,7 +38,37 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.0.0</version>
+
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+
+					<archive>
+						<manifest>
+							<mainClass>${main.class}</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+
+						<phase>package</phase>
+
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
 
 				<configuration>
 					<source>1.8</source>
@@ -51,18 +81,28 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.5.0</version>
 
-				<configuration>
-					<executable>java</executable>
+				<executions>
+					<execution>
+						<!-- Run the mailer -->
+						<id>mailerd</id>
 
-					<arguments>
-						<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n</argument>
-						<argument>-classpath</argument>
-						<classpath />
-						<argument>${main.class}</argument>
-					</arguments>
+						<goals>
+							<goal>exec</exec>
+						</goals>
+						<configuration>
+							<executable>java</executable>
 
-					<mainClass>${main.class}</mainClass>
-				</configuration>
+							<arguments>
+								<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n</argument>
+								<argument>-classpath</argument>
+								<classpath />
+								<argument>${main.class}</argument>
+							</arguments>
+
+							<mainClass>${main.class}</mainClass>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
