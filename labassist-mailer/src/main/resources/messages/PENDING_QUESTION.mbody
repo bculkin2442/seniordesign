@@ -1,0 +1,13 @@
+{recipient},
+	There are {nquestions} questions waiting for you:
+
+{questions}
+
+	Log onto the system to view them.
+
+LabAssist
+
+NOTE: 
+	This is an automated notification. 
+	Please do not reply to it.
+	No one will see the reply.
