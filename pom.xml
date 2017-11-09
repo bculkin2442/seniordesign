@@ -48,8 +48,8 @@
 	</build>
 
 	<modules>
-		<module>mailer</module>
-		<module>datagen</module>
-    <module>labassist-beans</module>
-  </modules>
+		<module>labassist-mailer</module>
+		<module>labassist-datagen</module>
+		<module>labassist-beans</module>
+	</modules>
 </project>

@@ -11,7 +11,7 @@
 	<artifactId>labassist-mailer</artifactId>
 	<packaging>jar</packaging>
 
-	<name>mailer</name>
+	<name>labassist-mailer</name>
 	<description>
 		Batch job to retrieve pending notifications and dispatch them by
 		mail.
