@@ -14,6 +14,15 @@ create type role as enum (
 	'sysadmin'
 );
 
+-- The departments that are in the system
+create table departments (
+	deptid char(4),
+
+	deptname varchar(255) UNIQUE NOT NULL,
+
+	primary key(deptid)
+);
+
 -- The users of the system.
 create table users (
 	-- Every user has an 9 char ID number from WVU.
@@ -23,13 +32,20 @@ create table users (
 	-- 	the primary.
 	idno char(9),
 
+	-- @NOTE
+	-- 	This should only be null for students and tutors and other roles
+	-- 	that aren't bound to a single department
+	dept char(4),
+
 	username varchar(255) NOT NULL,
 	realname varchar(255) NOT NULL,
 	email    varchar(255) NOT NULL,
 
 	role role             NOT NULL,
 
-	primary key(idno)
+	primary key(idno),
+
+	foreign key(dept) references departments(deptid)
 );
 
 create type msgtype as enum (
@@ -57,9 +73,13 @@ create table pendingmsgs (
 create table classes (
 	cid serial,
 
+	dept char(4) NOT NULL,
+
 	name varchar(255) NOT NULL,
 
-	primary key(cid)
+	primary key(cid),
+	
+	foreign key(dept) references departments(deptid)
 );
 
 -- List of all terms that have existed.
@@ -86,26 +106,11 @@ create table sections (
 	foreign key(teacher) references users(idno)
 );
 
--- List of who attends which sections
-create table section_attends (
-	student char(8),
-	section int,
-
-	-- True if someone is a tutor, instead of a student
-	tutors boolean   NOT NULL,
-
-	-- @NOTE
-	-- 	A student can't tutor a class he is currently in.
-	primary key(student, section),
-
-	foreign key(student) references users(idno),
-	foreign key(section) references sections(secid)
-);
-
 -- List of clock in/outs for lab usage.
 create table usage (
 	student char(8),
 	section int,
+
 	mark    timestamp,
 
 	-- True if this is a check in, false if it is a check out.
@@ -137,6 +142,8 @@ create type question_status as enum (
 create table questions (
 	quid serial,
 
+	subject int            NOT NULL,
+
 	title varchar(255)     NOT NULL,
 	asker char(8)          NOT NULL,
 
@@ -144,6 +151,7 @@ create table questions (
 
 	primary key(quid),
 
+	foreign key(subject) references sections(secid),
 	foreign key(asker) references users(idno)
 );
 
