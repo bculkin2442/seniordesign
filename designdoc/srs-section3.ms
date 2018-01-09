@@ -14,32 +14,61 @@ This component interacts with both the end-user and the database, getting input
 and output from both.
 .Endsup
 .Superhead "Component Design Description"
-The web interface has two main components:
+The web interface has three main components:
 .RS
 .IP "User Mode"
-Q&A
-Reporting
-User Management
+User mode is the component that the staff will interact with the most. Students
+will also interact with it occasionally, mainly to use the question and answer
+system. User mode is more a container for three subcomponents:
+.RS
+.IP "Question & Answer"
+The question and answer system will allow for students to ask questions, tutors
+and staff to respond to those questions, and then for students to ask follow-up
+questions as well.
+.IP "Reporting"
+The reporting system provides the usage reports for the labs. These include:
+.RS
+.Bullet
+Lab Utilization Per Section
+.Bullet
+Lab Utilization Per Time Period
+.Bullet
+Lab Utilization Per Professor
+.RE
+.IP "User Management"
+The user management provides the capability for staff and administrators to
+manage the users of the system, including who tutors are, who staff are, and who
+administrators are; among other things.
+.RE
 .IP "Kiosk Mode"
 Kiosk mode is the component that will be the one that students interact with the
 most. It allows the students and tutors to clock in and out of specific lab
 sections, and provides the database with the information necessary to provide
 analytic reports.
-.RE
-and two minor components:
-.RS
 .IP "Login"
 The login component is the first component that the user sees and the one that
 is responsible for allowing the users to use the other components. Upon
 using the system for the first time, the user will directed to the User
-Registration component; otherwise, they will be directed to the component that
+Registration sub-component; otherwise, they will be directed to the component that
 they selected.
+.RS
 .IP "User Registration"
 User Registration is responsible for taking first time users and associating
 their real name, email and username with their student ID number.
 .RE
 .Endsup
 .Superhead "Workflows and Algorithms"
+.RE
+.RE
+.RE
+.DS L
+.PSPIC "webflow.eps"
+.ce 1
+\fBFig. 1:\fPWeb Interface Flow Diagram
+.DE
+.RS
+.RS
+.RS
 .Endsup
 .Endsub
 .Subhead "Component II: Database"
@@ -69,6 +98,17 @@ scheduling feature to work.
 .RE
 .Endsup
 .Superhead "Workflows and Algorithms"
+.RE
+.RE
+.RE
+.DS L
+.PSPIC "sql-depend.eps"
+.ce 1
+\fBFig. 2:\fP Table Category Dependancies
+.DE
+.RS
+.RS
+.RS
 For a more detailed description of the database, see the attached database
 schema.
 .Endsub

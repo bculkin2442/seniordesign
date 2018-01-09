@@ -5,7 +5,7 @@ all: srs.pdf
 srs-section2.ms:
 	touch srs-section2.ms
 
-srs-section3.ms:
+srs-section3.ms: webflow.eps sql-depend.eps
 	touch srs-section3.ms
 
 srs.ms: srs.tmac srs-section1.ms srs-section2.ms srs-section3.ms
