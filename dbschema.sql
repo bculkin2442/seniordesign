@@ -47,7 +47,7 @@ create table users (
 
 	primary key(idno),
 
-	foreign key(dept) references departments(deptid)
+	foreign key(deptid) references departments(deptid)
 );
 
 create type msgtype as enum (
@@ -108,7 +108,7 @@ create table sections (
 
 	primary key(secid),
 
-	foreign key(class)   references classes(cid),
+	foreign key(cid)     references classes(cid),
 	foreign key(term)    references terms(code),
 	foreign key(teacher) references users(idno)
 );
@@ -121,10 +121,10 @@ create table usage (
 	markin    timestamp NOT NULL,
 	markout   timestamp,
 
-	primary key(student, section, markin),
+	primary key(student, secid, markin),
 
 	foreign key(student) references users(idno),
-	foreign key(section) references sections(secid)
+	foreign key(secid)   references sections(secid)
 );
 
 -- @NOTE
@@ -195,10 +195,10 @@ create table schedules (
 	starttime timestamp NOT NULL,
 	endtime   timestamp NOT NULL,
 
-	primary key(student, section),
+	primary key(student, secid),
 
 	foreign key(student) references users(idno),
-	foreign key(section) references sections(secid)
+	foreign key(secid) references sections(secid)
 );
 
 -- @TODO 10/16/17 Ben Culkin :DBSchema
