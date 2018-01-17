@@ -23,19 +23,21 @@ create table departments (
 	primary key(deptid)
 );
 
--- The users of the system.
+-- Every user has an 9 char ID number from WVU.
+--
+-- @NOTE
+-- 	If DB space becomes an issues, swap to using an integer key as
+-- 	the primary.
+create domain userid as char(9);
+
 create table users (
-	-- Every user has an 9 char ID number from WVU.
-	--
-	-- @NOTE
-	-- 	If DB space becomes an issues, swap to using an integer key as
-	-- 	the primary.
-	idno char(9),
+	-- Key for IDing users
+	idno userid,
 
 	-- @NOTE
 	-- 	This should only be null for students and tutors and other roles
 	-- 	that aren't bound to a single department
-	dept char(4),
+	deptid varchar(4),
 
 	username varchar(255) NOT NULL,
 	realname varchar(255) NOT NULL,
@@ -59,7 +61,7 @@ create type msgtype as enum (
 create table pendingmsgs (
 	msgid serial,
 
-	recipient char(8)       NOT NULL,
+	recipient userid        NOT NULL,
 
 	mstype msgtype          NOT NULL,
 	body   text             NOT NULL,
@@ -73,7 +75,7 @@ create table pendingmsgs (
 create table classes (
 	cid serial,
 
-	dept char(4) NOT NULL,
+	dept char(4)      NOT NULL,
 
 	name varchar(255) NOT NULL,
 
@@ -82,9 +84,14 @@ create table classes (
 	foreign key(dept) references departments(deptid)
 );
 
+-- ID for each term
+--
+-- Consists of the 4-digit year, then the 2-digit month the term started in
+create domain termcode as char(6);
+
 -- List of all terms that have existed.
 create table terms (
-	code char(6) NOT NULL,
+	code termcode NOT NULL,
 
 	primary key(code)
 );
@@ -93,11 +100,11 @@ create table terms (
 create table sections (
 	secid serial,
 
-	code    char(2)   NOT NULL,
+	code    char(3)  NOT NULL,
 
-	class   int       NOT NULL,
-	term    char(6)   NOT NULL,
-	teacher char(8)   NOT NULL,
+	cid     int      NOT NULL,
+	term    termcode NOT NULL,
+	teacher userid   NOT NULL,
 
 	primary key(secid),
 
@@ -108,17 +115,13 @@ create table sections (
 
 -- List of clock in/outs for lab usage.
 create table usage (
-	student char(8),
-	section int,
+	student userid,
+	secid   int,
 
-	mark    timestamp,
+	markin    timestamp NOT NULL,
+	markout   timestamp,
 
-	-- True if this is a check in, false if it is a check out.
-	checkin boolean    NOT NULL,
-
-	-- @NOTE
-	-- 	Should section be a part of this?
-	primary key(student, section, mark),
+	primary key(student, section, markin),
 
 	foreign key(student) references users(idno),
 	foreign key(section) references sections(secid)
@@ -145,7 +148,7 @@ create table questions (
 	subject int            NOT NULL,
 
 	title varchar(255)     NOT NULL,
-	asker char(8)          NOT NULL,
+	asker userid           NOT NULL,
 
 	status question_status NOT NULL,
 
@@ -160,7 +163,7 @@ create table posts (
 	postid   serial,
 	question int,
 
-	author char(8)      NOT NULL,
+	author userid       NOT NULL,
 	body   text         NOT NULL,
 
 	-- True if this post is a question, false if this quest is an answer
@@ -174,7 +177,7 @@ create table posts (
 
 -- List of which tutors are available, and for how long
 create table availability (
-	student   char(8),
+	student   userid,
 
 	starttime timestamp NOT NULL,
 	endtime   timestamp NOT NULL,
@@ -186,8 +189,8 @@ create table availability (
 
 -- List of when tutors are scheduled to be active
 create table schedules (
-	student char(8),
-	section int,
+	student userid,
+	secid int,
 
 	starttime timestamp NOT NULL,
 	endtime   timestamp NOT NULL,
@@ -197,6 +200,7 @@ create table schedules (
 	foreign key(student) references users(idno),
 	foreign key(section) references sections(secid)
 );
+
 -- @TODO 10/16/17 Ben Culkin :DBSchema
 --	Add constraints where appropriate to the schema.
 --
