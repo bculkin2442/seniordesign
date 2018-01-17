@@ -6,55 +6,33 @@ package wvutech.labassist.beans;
  * @author Ben Culkin
  */
 public class User {
-	public final Role role;
+	public static class UserID {
+		public final String uid;
 
-	public final String idno;
+		public UserID(String id) {
+			uid = id;
+		}
+	}
+
+	public UserID idno;
+
+	public final String deptid;
 
 	public final String username;
 	public final String realname;
 	public final String email;
 
-	public User(Role role, String idno, String username, String realname, String email) {
-		this.role = role;
+	public final Role role;
 
-		this.idno = idno;
+	public User(UserID id, String dept, String user, String real, String mail, Role rol) {
+		idno = id;
 
-		this.username = username;
-		this.realname = realname;
-		this.email    = email;
-	}
+		deptid = dept;
 
-	public static final class Builder {
-		private Role role;
+		username = user;
+		realname = real;
+		email    = mail;
 
-		private String idno;
-
-		private String username;
-		private String realname;
-		private String email;
-
-		public void role(Role role) {
-			this.role = role;
-		}
-
-		public void idno(String idno) {
-			this.idno = idno;
-		}
-
-		public void username(String username) {
-			this.username = username;
-		}
-
-		public void realname(String realname) {
-			this.realname = realname;
-		}
-
-		public void email(String email) {
-			this.email = email;
-		}
-
-		public User build() {
-			return new User(role, idno, username, realname, email);
-		}
+		role = rol;
 	}
 }
