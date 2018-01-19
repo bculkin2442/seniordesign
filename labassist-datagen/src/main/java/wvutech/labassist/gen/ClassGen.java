@@ -8,7 +8,7 @@ import wvutech.labassist.beans.Department;
 import wvutech.labassist.beans.Department.DepartmentID;
 
 public class ClassGen {
-	public Class generateClass(int cid, DepartmentID dept) {
+	public static Class generateClass(int cid, DepartmentID dept) {
 		return new Class(cid, dept, RGrammars.generateExport("[college-course]"));
 	}
 }
