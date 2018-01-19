@@ -1,3 +1,5 @@
 labassist-beans/target
 labassist-datagen/target
 labassist-mailer/target
+**/tags
+tags

@@ -27,7 +27,7 @@ public class DataGen {
 
 				PreparedStatement stmt = c.prepareStatement("insert into departments (deptid, deptname) values (?, ?)");
 
-				for(int i = 0; i < 20; i++) {
+				for(int i = 0; i < 5; i++) {
 					Department dept = DeptGen.generateDepartment();
 
 					stmt.setString(1, dept.deptid.deptid);
@@ -38,6 +38,8 @@ public class DataGen {
 				}
 
 				int[] res = stmt.executeBatch();
+
+				c.commit();
 
 				stmt.close();
 			} catch (Exception ex) {
