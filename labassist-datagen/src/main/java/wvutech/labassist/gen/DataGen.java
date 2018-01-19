@@ -2,11 +2,13 @@ package wvutech.labassist.gen;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 import bjc.rgens.newparser.GrammarException;
 import bjc.rgens.newparser.RGrammars;
+
+import wvutech.labassist.beans.*;
 
 /**
  * Main class for generating data.
@@ -16,13 +18,26 @@ import bjc.rgens.newparser.RGrammars;
 public class DataGen {
 	private static final String CONN_STRING = "jdbc:postgresql://localhost:5432/labassist";
 
-
 	public static void main(String[] args) {
 		try {
-			Class.forName("org.postgresql.Driver");
+			java.lang.Class.forName("org.postgresql.Driver");
 
 			try(Connection c = DriverManager.getConnection(CONN_STRING, "labassist", "labassist")) {
-				Statement stmt = c.createStatement();
+				c.setAutoCommit(false);
+
+				PreparedStatement stmt = c.prepareStatement("insert into departments (deptid, deptname) values (?, ?)");
+
+				for(int i = 0; i < 20; i++) {
+					Department dept = DeptGen.generateDepartment();
+
+					stmt.setString(1, dept.deptid.deptid);
+					
+					stmt.setString(2, dept.deptname);
+
+					stmt.addBatch();
+				}
+
+				int[] res = stmt.executeBatch();
 
 				stmt.close();
 			} catch (Exception ex) {
