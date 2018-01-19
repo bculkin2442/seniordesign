@@ -48,7 +48,7 @@ public class DataGen {
 	}
 
 	private static List<wvutech.labassist.beans.Class> generateClasses(int noClasses, Connection c, List<Department> depts) throws Exception {
-		PreparedStatement stmt = c.prepareStatement("insert into departments (dept, name) values (?, ?)");
+		PreparedStatement stmt = c.prepareStatement("insert into classes (dept, name) values (?, ?)");
 
 		for(Department dept : depts) {
 			for(int i = 0; i < noClasses; i++) {
@@ -70,7 +70,7 @@ public class DataGen {
 		List<wvutech.labassist.beans.Class> list = new ArrayList<>(noClasses);
 
 		try (Statement stat = c.createStatement()) {
-			ResultSet rs = stat.executeQuery("select cid, dept, name frmo classes");
+			ResultSet rs = stat.executeQuery("select cid, dept, name from classes");
 			
 			while(rs.next()) {
 				Department.DepartmentID did = new Department.DepartmentID(rs.getString("dept"));
