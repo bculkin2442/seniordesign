@@ -31,7 +31,6 @@ public class DataGen {
 					Department dept = DeptGen.generateDepartment();
 
 					stmt.setString(1, dept.deptid.deptid);
-					
 					stmt.setString(2, dept.deptname);
 
 					stmt.addBatch();

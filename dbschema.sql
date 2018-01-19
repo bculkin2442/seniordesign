@@ -37,6 +37,9 @@ create table users (
 	-- @NOTE
 	-- 	This should only be null for students and tutors and other roles
 	-- 	that aren't bound to a single department
+	--
+	-- @NOTE
+	-- 	Convert this to a join table if we need to
 	deptid varchar(4),
 
 	username varchar(255) NOT NULL,
