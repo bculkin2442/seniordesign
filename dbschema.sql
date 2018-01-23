@@ -7,13 +7,20 @@
 
 -- All of the possible roles for users, put in order of increasing privileges.
 create type role as enum (
+	'sysadmin',
 	'student',
 	'tutor',
 	'staff',
 	'admin',
-	'sysadmin'
+	'developer'
 );
 
+create table pageaccess (
+	role role NOT NULL,
+	page text NOT NULL,
+
+	primary key(role, page)
+);
 -- The departments that are in the system
 create table departments (
 	deptid char(4),
