@@ -56,7 +56,7 @@ Roles:
 		- All abilities of staff plus
 			- Can see other professor's classes
 			- Can see utilization report per professor
-			- Can promote/demote students to tutors and create/delete staff
+			- Can create/delete staff
 	SysAdmin
 		- Does not have permission to do anything except the following:
 			- Create terms

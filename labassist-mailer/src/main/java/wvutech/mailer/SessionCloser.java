@@ -20,10 +20,10 @@ import javax.mail.internet.MimeMessage;
 
 public class SessionCloser {
 	private static final String OPENSESSION_QUERY =
-		  "select stud.email as email, stud.realname as student, clas.name as cname,"
+		  "select usr.email as email, usr.realname as student, clas.name as cname,"
 		+ " usag.student as studid, usag.secid as section, usag.markin as intime"
-		+ " from usage usag join users user on usag.student = user.idno"
-		+ " join sections sect on usag.secid = sect.sectid"
+		+ " from usage usag join users usr on usag.student = usr.idno"
+		+ " join sections sect on usag.secid = sect.secid"
 		+ " join classes clas on sect.cid = clas.cid"
 		+ " where usag.markout is null";
 

@@ -14,6 +14,10 @@ public class Class {
 
 		department = dept;
 
-		name = nam;
+		if(nam.length() > 4) {
+			name = nam.substring(0, 250);
+		} else {
+			name = nam;
+		}
 	}
 }
