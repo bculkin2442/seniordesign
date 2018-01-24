@@ -13,6 +13,7 @@ import java.util.Map;
 public class Message {
 	/** The type of this message. */
 	public final MessageType type;
+
 	/* Who the message is addressed to. */
 	private List<String> recipients;
 	/* Message body variables. */

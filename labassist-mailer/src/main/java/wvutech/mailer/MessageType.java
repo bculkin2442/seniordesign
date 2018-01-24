@@ -12,6 +12,10 @@ import java.util.Scanner;
  */
 public enum MessageType {
 	/**
+	 * A clock-out has been automatically generated.
+	 */
+	AUTOCLOCK,
+	/**
 	 * There is a question awaiting a response.
 	 *
 	 * Could be either
@@ -26,6 +30,8 @@ public enum MessageType {
 
 	public String getSubject() {
 		switch(this) {
+		case AUTOCLOCK:
+			return "[LabAssist] Automatic Clockout";
 		case PENDING_QUESTION:
 			return "[LabAssist] You have Pending Questions";
 		case SCHEDULE_CHANGED:

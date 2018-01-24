@@ -36,12 +36,17 @@ public class Mailer {
 				MimeMessage mmsg = new MimeMessage(sess);
 
 				mmsg.setFrom("labassist@mail.wvu.edu");
+
 				for(String recip : msg.getRecipients()) {
 					mmsg.setRecipients(Message.RecipientType.TO, recip);
 				}
+
 				mmsg.setSubject(msg.type.getSubject());
 				mmsg.setSentDate(new Date());
-				mmsg.setText(msg.merge(msg.type.getBody()));
+
+				String body = msg.merge(msg.type.getBody());
+
+				mmsg.setText(msg.merge(body));
 
 				System.out.printf("Sending msg %d:\n%s" , nmsg, msg);
 				//Transport.send(mmsg, "labassist@mail.wvu.edu", "");

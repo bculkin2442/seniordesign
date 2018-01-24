@@ -1,0 +1,10 @@
+{recipient},
+	You failed to clock out of {class}. An automatic clock-out at 12:00 AM
+	has been generated for you.
+
+LabAssist
+
+NOTE: 
+	This is an automated notification. 
+	Please do not reply to it.
+	No one will see the reply.
