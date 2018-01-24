@@ -60,6 +60,9 @@ create table users (
 	foreign key(deptid) references departments(deptid)
 );
 
+-- @TODO 1/23/18 Ben Culkin :Avatar
+-- 	Add a BLOB storage table for containing user avatars
+
 create type msgtype as enum (
 	-- @TODO 10/10/17 Ben Culkin :MsgTypes
 	-- 	Fill this in with the types of messages we need.
