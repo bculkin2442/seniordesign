@@ -111,9 +111,10 @@ public class SessionCloser {
 
 				String body = msg.merge(msg.type.getBody());
 
+				System.out.printf("\tTRACE: Message body\n%s", body);
 				mmsg.setText(body);
 
-				System.out.printf("Sending msg %d:\n%s" , nmsg, msg);
+				System.out.printf("\nSending msg %d:\n%s" , nmsg, msg);
 
 				Transport.send(mmsg, "labassist@mail.wvu.edu", "");
 			} catch (MessagingException mex) {
