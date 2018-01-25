@@ -124,7 +124,7 @@ public class Message {
 		 * 	I'm not sure efficency is a real problem.
 		 */
 		for(Map.Entry<String, String> ent : vars.entrySet()) {
-			newBody.replaceAll(String.format("\\{%s\\}", ent.getKey()), ent.getValue());
+			newBody = newBody.replaceAll(String.format("\\{%s\\}", ent.getKey()), ent.getValue());
 		}
 		
 		return newBody;
