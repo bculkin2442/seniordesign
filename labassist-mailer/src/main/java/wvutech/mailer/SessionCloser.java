@@ -109,7 +109,7 @@ public class SessionCloser {
 				mmsg.setSubject(msg.type.getSubject());
 				mmsg.setSentDate(new Date());
 
-				String body = msg.merge(msg.type.getBody());
+				String body = msg.merge(msg.merge(msg.type.getBody()));
 
 				System.out.printf("\tTRACE: Message body\n%s", body);
 				mmsg.setText(body);
