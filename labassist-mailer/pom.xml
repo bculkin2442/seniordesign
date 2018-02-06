@@ -22,6 +22,7 @@
 		<main.class>wvutech.mailer.Mailer</main.class>
 		<main.class1>wvutech.mailer.MailerGen</main.class1>
 		<main.class2>wvutech.mailer.DemoMailer</main.class2>
+		<main.class2>wvutech.mailer.SessionCloser</main.class2>
 	</properties>
 
 	<licenses>
@@ -146,6 +147,29 @@
 							</arguments>
 
 							<mainClass>${main.class2}</mainClass>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- 
+						Close pending checkouts, and
+						notify people of them.
+						-->
+						<id>close-pending-sessions</id>
+
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>java</executable>
+
+							<arguments>
+								<argument>${main.class3} </argument>
+								<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n</argument>
+								<argument>-classpath</argument>
+								<classpath />
+							</arguments>
+
+							<mainClass>${main.class3}</mainClass>
 						</configuration>
 					</execution>
 				</executions>

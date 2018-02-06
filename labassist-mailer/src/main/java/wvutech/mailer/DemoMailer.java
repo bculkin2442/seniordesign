@@ -27,7 +27,7 @@ public class DemoMailer {
 			MimeMessage mmsg = new MimeMessage(sess);
 
 			mmsg.setFrom("labassist@mail.wvu.edu");
-			mmsg.setRecipients(Message.RecipientType.TO, "bjculkin@mix.wvu.edu");
+			mmsg.setRecipients(Message.RecipientType.TO, "agcantrell@mix.wvu.edu");
 			mmsg.setSubject("LabAssist Test Message");
 			mmsg.setSentDate(new Date());
 			mmsg.setText("If you are seeing this message, LabAssist's mailing notifications work");

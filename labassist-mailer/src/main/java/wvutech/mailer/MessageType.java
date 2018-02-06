@@ -50,6 +50,7 @@ public enum MessageType {
 
 		while(scn.hasNextLine()) {
 			sb.append(scn.nextLine());
+			sb.append("\n");
 		}
 
 		return sb.toString();

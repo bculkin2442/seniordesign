@@ -60,8 +60,15 @@ create table users (
 	foreign key(deptid) references departments(deptid)
 );
 
--- @TODO 1/23/18 Ben Culkin :Avatar
--- 	Add a BLOB storage table for containing user avatars
+create table user_avatars (
+	idno userid,
+
+	image bytea   NOT NULL,
+
+	primary key(userid),
+
+	foreign key(idno) references users(idno)
+);
 
 create type msgtype as enum (
 	-- @TODO 10/10/17 Ben Culkin :MsgTypes
