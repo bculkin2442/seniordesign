@@ -3,7 +3,7 @@
 \# Set in 12pt font
 .nr ps 12p
 \# Load macros
-.so srs.tmac
+.so designdoc.tmac
 \# Number pages after title page
 .P1
 \# Date in footers
@@ -32,9 +32,9 @@ Version: 1
 .AB no
 .AE
 \# Load sections
-.so srs-section1.ms
-.so srs-section2.ms
-.so srs-section3.ms
+.so designdoc-section1.ms
+.so designdoc-section2.ms
+.so designdoc-section3.ms
 \# Title of contents will get put in front on print-out
 .bp
 \&
