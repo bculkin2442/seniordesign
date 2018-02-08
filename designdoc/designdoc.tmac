@@ -24,19 +24,6 @@
 .de Endsub
 .RE
 ..
-\# Print a defn. list item
-.de Defn
-.IP "\fB\\$1\fP"
-..
-\# Print a reference
-.de Refr
-.XP
-[\\n+[ref]]\&
-..
-\# Print a paragraph
-.de Para
-.PP
-..
 \# Begin a 3rd-level heading
 .de Superhead
 .NH 3
@@ -50,7 +37,37 @@
 .de Endsup
 .RE
 ..
+\# Begin a 4th-level heading
+.de Suprahead
+.NH 4
+\\$1
+.RS
+.XS
+\t\t\t\\*[SN-DOT] \\$1
+.XE
+..
+\# End a 4th-level heading
+.de Endsupr
+.RE
+..
+\# Print a defn. list item
+.de Defn
+.IP "\fB\\$1\fP"
+..
+\# Print a reference
+.de Refr
+.XP
+[\\n+[ref]]\&
+..
+\# Print a paragraph
+.de Para
+.PP
+..
 \# Print a bulleted item
 .de Bullet
 .IP \[bu]
+..
+\# Print a glossary item
+.de Gloss
+.IP "\f(BI\\$1\fP"
 ..

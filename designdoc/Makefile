@@ -5,7 +5,7 @@ all: designdoc.pdf
 designdoc-section2.ms:
 	touch designdoc-section2.ms
 
-designdoc-section3.ms: webflow.eps sql-depend.eps
+designdoc-section3.ms: login-diagram.eps clockinout-diagram.eps
 	touch designdoc-section3.ms
 
 designdoc.ms: designdoc.tmac designdoc-section1.ms designdoc-section2.ms designdoc-section3.ms
@@ -18,4 +18,4 @@ clean:
 	rm designdoc.pdf
 
 preview: designdoc.pdf
-	mupdf-x11 designdoc.pdf
+	mupdf-gl designdoc.pdf

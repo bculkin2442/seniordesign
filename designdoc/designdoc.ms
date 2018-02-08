@@ -2,6 +2,8 @@
 .nr vs 24p
 \# Set in 12pt font
 .nr ps 12p
+\# Indent less
+\#.nr pi 3n
 \# Load macros
 .so designdoc.tmac
 \# Number pages after title page
