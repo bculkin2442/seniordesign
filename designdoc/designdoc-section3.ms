@@ -605,6 +605,111 @@ user canceles sumbission at any point, the user is redirected to the manage
 sections page. 
 .Endsupr
 .Endsup
+.Superhead "Manage Terms"
+.Suprahead "Component Interface"
+.KS
+.UL "Logic"
+.Gloss "displayAll()"
+Calls internal functions to generate the base form with a listing of sections.
+.Gloss "genEditForm()"
+Generates an 'edit section' form to be displayed. Calls
+formattedSectionInformation internally.
+.Gloss "formattedSectionInformation()"
+Fills the edit form with the section information.
+.Gloss "generateTable()"
+Formats list of sections into a tabular listing of sections.
+.Gloss "getDepartmentList(currentDepartment)"
+Creates a dropdown of available departments to assign the section to.
+.Gloss "getDetailedSectionInfo(sectionid)"
+Pulls the information of the section being edited.
+.Gloss "getSectionList()"
+Queries database for the list of sections.
+.Gloss "genCreate()"
+Generates the page to create a new section.
+.Gloss "attemptCreate()"
+Attempts to insert a new section into the database.
+.KE
+.KS
+.UL "Display"
+.Gloss "printHeader()"
+Prints static HTML code for the page start.
+.Gloss "printStartBody()"
+Prints static HTML code for the opening body tags.
+.Gloss "printPortalHead()"
+Prints the visible header bar for the portal.
+.Gloss "printSideBar(userinfo, navigation)"
+Prints the sidebar containing basic user information, as well as a navigation
+bar.
+.Gloss "printForm(html, error)"
+Takes the dynamic HTML registration form and any generated errors. Inserts the
+dynamic code into a static template and prints it.
+.Gloss "printEndBody()"
+Prints static HTML code for closing the page.
+.KE
+.Endsupr
+.Suprahead "Component Design Description"
+This page is accessable from any location by a valid user. A valid user for this
+page is defined as a user who has successfully logged in via the portal system
+and a user with the role of sysadmin or greater. The action page checks that a
+user has successfully logged in andredirects them to the login page if they are
+not. The domain queries the database for the current listing of terms before
+passing to the responder. The responder then displays the form to the user. If
+the edit term button is clicked, the action page notifies the domain to generate
+the edit term form for the responder to display. Once an edit has been submitted
+the domain updates the database accordingly. Upon successful submission or
+cancelation, the term is redirected back to the edit term page. If the add term
+button is clicked, the domain generates the create term form and passes it to
+the responder to display to the user. On a submit, the domain attempts to insert
+the record into the database. If successful or the user canceles sumbission at
+any point, the user is redirected to the manage terms page. 
+.Endsupr
+.Endsup
+.Superhead "Reporting"
+This component displays the current available reports.
+.Suprahead "Component Interface"
+.KS
+.UL "Logic"
+.Gloss "generateForm()"
+Calls internal functions to generate the form.
+.Gloss "genReports()"
+Generates a dropdown for the user to choose the desired report.
+.Gloss "queryReport()"
+Retrieves the data from the database.
+.Gloss "generateReport(XXX)()"
+Generates the XXX report form, where XXX is the name of the report.
+.KE
+.KS
+.UL "Display"
+.Gloss "printHeader()"
+Prints static HTML code for the page start.
+.Gloss "printStartBody()"
+Prints static HTML code for the opening body tags.
+.Gloss "printPortalHead()"
+Prints the visible header bar for the portal.
+.Gloss "printSideBar(userinfo, navigation)"
+Prints the sidebar containing basic user information, as well as a navigation
+bar.
+.Gloss "printForm(html, error)"
+Takes the dynamic HTML registration form and any generated errors. Inserts the
+dynamic code into a static template and prints it.
+.Gloss "printEndBody()"
+Prints static HTML code for closing the page.
+.KE
+.Endsupr
+.Suprahead "Component Design Description"
+This page is accessable from any location by a valid user. A valid user for this
+page is defined as a user who has successfully logged in via the portal system
+and a user with the role of sysadmin or greater. The action page checks that a
+user has successfully logged in andredirects them to the login page if they are
+not. The action page checks that a user has successfully logged in and redirects
+them to the login page if they are not. The domain queries the database for a
+list of reports and generates a dropdown populated with the report names for the
+responder. The responder then displays the form containing the report to the
+user. If a new form is selected, the action page notifies the domain to create
+the newly requested form. The result is passed to the responder for displaying.
+This action is repeatable indefinately by the user. 
+.Endsupr
+.Endsup
 .Endsub
 .Subhead "Database"
 .Para
