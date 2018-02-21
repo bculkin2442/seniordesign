@@ -21,9 +21,12 @@ create table pageaccess (
 
 	primary key(role, page)
 );
+
+create domain deptid as varchar(6);
+
 -- The departments that are in the system
 create table departments (
-	deptid char(4),
+	deptid deptid,
 
 	deptname varchar(255) UNIQUE NOT NULL,
 
@@ -47,7 +50,7 @@ create table users (
 	--
 	-- @NOTE
 	-- 	Convert this to a join table if we need to
-	deptid varchar(4),
+	deptid deptid,
 
 	username varchar(255) NOT NULL,
 	realname varchar(255) NOT NULL,
@@ -95,7 +98,7 @@ create table pendingmsgs (
 create table classes (
 	cid serial,
 
-	dept char(4)      NOT NULL,
+	dept deptid       NOT NULL,
 
 	name varchar(255) NOT NULL,
 
