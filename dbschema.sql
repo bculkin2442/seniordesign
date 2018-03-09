@@ -114,10 +114,15 @@ create domain termcode as char(6);
 
 -- List of all terms that have existed.
 create table terms (
-	code termcode NOT NULL,
+	code termcode  NOT NULL,
+	
+	active boolean NOT NULL,
 
 	primary key(code)
 );
+
+-- Ensure that at most one term can be marked as active
+create unique_index on terms(active) where active = true;
 
 -- List of all sections of classes.
 create table sections (
@@ -198,32 +203,31 @@ create table posts (
 	foreign key(author)   references users(idno)
 );
 
--- List of which tutors are available, and for how long
-create table availability (
-	student   userid,
-
-	starttime timestamp NOT NULL,
-	endtime   timestamp NOT NULL,
-
-	primary key(student, starttime),
-
-	foreign key(student) references users(idno)
-);
-
 -- List of when tutors are scheduled to be active
 create table schedules (
 	student userid,
-	secid int,
+	dept    deptid,
 
 	starttime timestamp NOT NULL,
 	endtime   timestamp NOT NULL,
 
-	primary key(student, secid),
+	primary key(student, dept),
 
 	foreign key(student) references users(idno),
-	foreign key(secid) references sections(secid)
+	foreign key(dept) references departments(deptid)
 );
 
+-- Department lab constraints
+create table deptlabs (
+	dept deptid,
+	
+	labstart timestamp NOT NULL,
+	labend   timestamp NOT NULL,
+
+	primary key(dept),
+
+	foreign key(dept) references departments(deptid)
+)
 -- @TODO 10/16/17 Ben Culkin :DBSchema
 --	Add constraints where appropriate to the schema.
 --
