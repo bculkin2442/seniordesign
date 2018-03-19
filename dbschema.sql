@@ -221,6 +221,29 @@ create table schedules (
 	foreign key(secid) references sections(secid)
 );
 
+-------------------------------------------------
+-- VIEW DEFINITIONS
+-------------------------------------------------
+create view dept_stats as (
+    with class_counts as (
+        select departments.deptid, count(classes.cid) as classcount
+        from departments left outer join classes on (
+            departments.deptid = classes.dept
+        )
+        group by departments.deptid
+    ), prof_counts as (
+        select departments.deptid, count(filt_users.idno) as profcount
+        from departments left outer join (select * from users where users.role >= 'staff'::role) as filt_users on (
+            departments.deptid = filt_users.deptid
+        )
+        group by departments.deptid
+    )
+    SELECT departments.deptid, departments.deptname, class_counts.classcount, prof_counts.profcount
+    FROM departments JOIN class_counts ON
+    ( departments.deptid = class_counts.deptid )
+    join prof_counts on
+    (departments.deptid = prof_counts.deptid)
+);
 -- @TODO 10/16/17 Ben Culkin :DBSchema
 --	Add constraints where appropriate to the schema.
 --
