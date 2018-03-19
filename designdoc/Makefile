@@ -1,21 +1,21 @@
 .PHONY: all clean preview
 
-all: srs.pdf
+all: designdoc.pdf
 
-srs-section2.ms:
-	touch srs-section2.ms
+designdoc-section2.ms:
+	touch designdoc-section2.ms
 
-srs-section3.ms: webflow.eps sql-depend.eps
-	touch srs-section3.ms
+designdoc-section3.ms: login-diagram.eps clockinout-diagram.eps
+	touch designdoc-section3.ms
 
-srs.ms: srs.tmac srs-section1.ms srs-section2.ms srs-section3.ms
-	touch srs.ms
+designdoc.ms: designdoc.tmac designdoc-section1.ms designdoc-section2.ms designdoc-section3.ms
+	touch designdoc.ms
 
-srs.pdf: srs.ms 
-	groff -s -p -ms -m pspic -Tps srs.ms | ps2pdf - srs.pdf
+designdoc.pdf: designdoc.ms 
+	groff -s -p -ms -m pspic -Tps designdoc.ms | ps2pdf - designdoc.pdf
 
 clean:
-	rm srs.pdf
+	rm designdoc.pdf
 
-preview: srs.pdf
-	mupdf-x11 srs.pdf
+preview: designdoc.pdf
+	mupdf-gl designdoc.pdf

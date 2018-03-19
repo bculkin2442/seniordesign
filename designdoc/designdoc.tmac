@@ -1,0 +1,73 @@
+\# Begin a section
+.de Section
+.NH 1
+\\$1
+.RS
+.XS
+.B "\\*[SN-DOT] \\$1"
+.XE
+..
+\# End a section
+.de Endsec
+.RE
+..
+\# Begin a subheading
+.de Subhead
+.NH 2
+\\$1
+.RS
+.XS
+.I "\t\\*[SN-DOT] \\$1"
+.XE
+..
+\# End a subheading
+.de Endsub
+.RE
+..
+\# Begin a 3rd-level heading
+.de Superhead
+.NH 3
+\\$1
+.RS
+.XS
+\t\t\\*[SN-DOT] \\$1
+.XE
+..
+\# End a 3rd-level heading
+.de Endsup
+.RE
+..
+\# Begin a 4th-level heading
+.de Suprahead
+.NH 4
+\\$1
+.RS
+.XS
+\t\t\t\\*[SN-DOT] \\$1
+.XE
+..
+\# End a 4th-level heading
+.de Endsupr
+.RE
+..
+\# Print a defn. list item
+.de Defn
+.IP "\fB\\$1\fP"
+..
+\# Print a reference
+.de Refr
+.XP
+[\\n+[ref]]\&
+..
+\# Print a paragraph
+.de Para
+.PP
+..
+\# Print a bulleted item
+.de Bullet
+.IP \[bu]
+..
+\# Print a glossary item
+.de Gloss
+.IP "\f(BI\\$1\fP"
+..

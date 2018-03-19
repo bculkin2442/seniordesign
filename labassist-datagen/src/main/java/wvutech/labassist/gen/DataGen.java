@@ -20,8 +20,33 @@ import wvutech.labassist.beans.*;
  * @author Ben Culkin
  */
 public class DataGen {
+	private static int SCALE = 5;
+
 	private static final String CONN_STRING = "jdbc:postgresql://localhost:5432/labassist";
 
+	private static List<TermCode> generateTermCode(int noCodes, Connection c) throws Exception {
+		PreparedStatement stmt = c.prepareStatement("insert into  terms (code) values (?::termcode)");
+
+		List<TermCode> list = new ArrayList<>(noCodes);
+
+		for(int i = 0; i < noCodes; i++) {
+			TermCode code = TermCodeGen.generateTermCode();
+
+			list.add(code);
+
+			stmt.setString(1, code.code);
+
+			stmt.addBatch();
+		}
+
+		int[] res = stmt.executeBatch();
+
+		c.commit();
+
+		stmt.close();
+
+		return list;
+	}
 	private static List<Department> generateDepartments(int noDepts, Connection c) throws Exception {
 		PreparedStatement stmt = c.prepareStatement("insert into departments (deptid, deptname) values (?, ?)");
 
@@ -47,7 +72,16 @@ public class DataGen {
 		return list;
 	}
 
-	private static List<wvutech.labassist.beans.Class> generateClasses(int noClasses, Connection c, List<Department> depts) throws Exception {
+	private static List<Section> generateSections(int noSections, Connection c,
+			List<wvutech.labassist.beans.Class> classes, List<TermCode> codes) {
+		for(wvutech.labassist.beans.Class clasz : classes) {
+			for(TermCode term : codes) {
+				generateSection(0, cid, user, term);
+			}
+		}
+	}
+	private static List<wvutech.labassist.beans.Class> generateClasses(int noClasses, Connection c,
+		List<Department> depts) throws Exception {
 		PreparedStatement stmt = c.prepareStatement("insert into classes (dept, name) values (?, ?)");
 
 		for(Department dept : depts) {
@@ -91,9 +125,13 @@ public class DataGen {
 			try(Connection c = DriverManager.getConnection(CONN_STRING, "labassist", "labassist")) {
 				c.setAutoCommit(false);
 
-				List<Department> depts = generateDepartments(5, c);
+				List<TermCode> codes = generateTermCodes(SCALE, C);
 
-				List<wvutech.labassist.beans.Class> classes = generateClasses(5, c, depts);
+				List<Department> depts = generateDepartments(SCALE, c);
+
+				List<wvutech.labassist.beans.Class> classes = generateClasses(SCALE, c, depts);
+
+				List<Section> sections = generateSections(SCALE, c, classes, codes);
 			} catch (Exception ex) {
 				System.out.println("ERROR: Something went wrong (doing stuff with database)");
 

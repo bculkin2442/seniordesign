@@ -1,0 +1,377 @@
+3.1 Login
+    This major component handles logging users into the system via one of two authentication methods. First time users will be prompted to complete a registration form handled by the registration subcomponent when logging in from either authentication method.
+ 
+    3.1.1 Component 1 Login
+        This component exists solely to allow users gain access to the LabAssist system. This page is the default page on the server, as such all users start with this component. The login component has two methods. Method 1 is labeled Kiosk login and requires only an Employee ID or Student ID as input. Method 1 only grants access to the clock-in/clock-out (see 3.2) functionality. Method 2 is labeled User Login requiring both a username and password. Method 2 only grants access to the Portal component (see 3.3) of the system.  
+
+        3.1.1.1 Component Interfaces
+            Logic
+            -----
+            attemptPassLogin() -> Checks username and password combination by binding the LDAP server with the supplied credentials. 
+            attemptKioskLogin() -> Queries to see if Employee ID/Student ID is registered. Internally calls kioskLoginCheck() and directs user to registration or on to the clock-in/clock-out system.
+            isRegistered() -> Queries database to determine weather if a database record exists for user attempting to login
+            kioskLoginCheck() -> Queries the database to determine if a record exists for the given ID
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+
+        3.1.1.2 Component Design Description
+            Component is implemented as an Action-Domain-Responder model where login.php would be the action, login-logic.php  the domain, and login-page.php the responder.The register action first checks to ensure that the user is currently logged into the system via a session variable and redirects all users to the clock-in/clock-out component if the kiosk flag is set or the portal component if the userLogin flag is set. 
+            
+            When using method 1 the domain queries the database to determine if the user has an account already registered. If not, the system redirects to the register component (3.1.2). If so, users are directed to the clock-in/clock-out component (3.2).
+            
+            When using method 2 the domain queries the LDAP server with the supplied username and password pair via a bind call. If the bind fails, the responder displays an appropriate message. If the bind succeeds, the domain then queries the database to determine if a tuple exists with the appropriate user information. If no tuple is found then the domain redirects to the register component (3.2), otherwise the domain redirects to the portal component (3.3).
+
+
+
+    3.1.2 Component 2 Register
+        This component exists solely to register users with the LabAssist system. Users are directed to this component when a valid login attempt is made with the login component (see 3.1.1) and no record is found in the database with matching criteria.
+
+        3.1.2.1 Component Interfaces
+            Logic
+            -----
+            restoreForm() -> Restores previous values if form reloads.
+            generateRegistration() -> Generates the html registration form with values provided by LDAP controller.
+            attemptRegistration() -> Attempts to register the user. Performs input validation and internally calls insertRegistration.
+            insertRegistration() -> Queries the database attempting to add user information to the database.
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+
+        3.1.2.2 Component Design Description
+            Component is implemented as an Action-Domain-Responder model where user_registration.php would be the action, user_registration-logic.php  the domain, and user_registration-page.php the responder. The register action first checks to ensure that the user has only come from the login system via a session variable and redirects all users to the login screen if the variable is empty or not set. Next, the domain queries the LDAP server for basic user information such as email, and name by reverse looking up the information they provided at the login form submission. The responder then prints the pre-filled form to the screen. On form submission the action page informs the domain to attempt to register the user. On success, the user will proceed on to the next component in the sequence. On failure the user may update the input and try again or cancel. Cancelling returns the user to the login screen. At no point is a password ever stored in the local database before, during, and after registration. 
+
+
+    3.1.4 WorkFlow
+        Sequence Diagram
+
+   
+3.2 Clock-in/Clock-out
+    This major handles loggin the time in/time out and the session for students arriving to and from a lab. 
+    
+    3.2.1 Component Clock-in Clock-out
+        Students arrive here from a successful kiosk mode login and are given the option to clock in if not already clocked in or the ability to clock out if already clocked in. This componenet is only accessable from the kiosk mode login. 
+        
+        3.2.1.1 Component Interface
+            Logic
+            -----
+            generateClockinClockoutForm() -> Calls Internal functions to generate form. Renders either clock in or clock out form based on results from isClockin().
+            isClockin() -> Queries database to check for outstanding user clockin. Returns int status indicating true/false/error.
+            genClockoutForm() -> Generates the form for a clock out 
+            genLab(department) -> Creates the department listing for the clock-in form. Takes the previous value as parameter for resteroration if needed.
+            genClass(department,Class) -> Creates the class listing for the clock-in form based on department. Takes the previous class as parameter for resteroration if needed.
+            attemptClockinClockout() -> Master function that calls attemptClockin() or attemptClockout() internally depending on the result of isClockin();
+            attemptClockin() -> Queries the database attempting to insert record of clock in
+            attemptClockout() -> Queries the database attempting to update the appropriate outstanding clockin with the time out. 
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.2.1.2 Component Design Description
+            Users arrive at this component after a successful kiosk login. The component is implemented as an Action-Domain-Responder model where tutor_session.php would be the action, tutor_session-logic.php  the domain, and tutor_session-page.php the responder. The action module makes an initial check to ensure the user arrived from a successful kiosk login and then queries the domain to render the form. The domain checks the database to determine if the user has an outstanding clock in, if so, then the clock out form is generated and passed to the responder. If the user does not have an outstanding login, the login page is generated and passed to the responder. The generated page contains two dropdowns one for department and one for the class. After the user fills out the form and clicks submit, the action module calls attempt ClickinClockout() to insert or modify the database. If cancel is chosen the action module redirects the user to the login form. 
+
+    3.2.2 WorkFlow
+
+
+3.3 Portal
+    This major component contains the core functionality of the project. The ability to access the Question and Answer system, reporting, scheduling, and management functionality. Access to this major component is limited to users who have successfully logged into user mode. 
+    
+    3.3.1 Component 1 Home
+        Displays important information and updates to the user such as notifications of responses to questions.
+        
+        3.3.1.1 Component Interface
+            Logic
+            -----
+            generateBasicNotifications() -> Generates basic notifications such as new replies.
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(userinfo, navigation) -> Prints the side bar containing basic user information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.1.2 Component Design Description
+            This page serves as the default landing page after a user logs into the system from the user login. It is implemented as an Action-Domain-Responder model where portal-home.php would be the action, portal-logic, the domain, and portal-page as the responder. The action page performs a check to make sure the user is logged in and redirects them to the login page if they are not. The domain queries the database for any notifications and generates a templated response that gets passed to the responder. The responder then displays the output to the user. No input is taken from the user on this page. 
+
+
+    3.3.2 Tutor Schedules
+        This component displays the current lab schedules.
+        
+        3.3.2.1 Component Interface
+            Logic
+            -----
+            generateForm() -> Calls internal functions to generate the form. 
+            genDepartment() -> Generates a dropdown for the user to choose the desired lab section.
+            querySchedule() -> Retreives the schedule from the database and 
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(userinfo, navigation) -> Prints the side bar containing basic user information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.2.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system. The action page checks that a user has successfully logged in and redirects them to the login page if they are not. The domain queries the database for a list of departments and generates a dropdown populated with the departments for the responder. The responder then displays the form to the user. Once a selection has been made, the action page notifies the domain to create a schedule listing for the specified department. The result is passed to the responder for displaying. 
+
+
+    3.3.3 Q/A System
+        This compoenent allows users to submit questions and allows tutors to respond to a student's question. 
+    
+        3.3.3.1 Component Interface
+            Logic
+            -----
+            generateForm() -> Calls internal functions to generate the form. 
+            createQuestion() -> Generates form for creation of a new question
+            generateListing() -> Generates a listing of all threads created by user
+            generateThread() -> Generates a specified thread.
+            queryThreads(user) -> Queries listing of threads by user
+            queryThread(id) -> Requests thread by id from the database
+            queryCreateQuestion() -> Inserts user question into database
+            queryCreateResponse(id) -> Inserts a response to question into database
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(userinfo, navigation) -> Prints the side bar containing basic user information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.3.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system. The action page checks that a user has successfully logged in and redirects them to the login page if they are not. The domain queries the database for a list of threads for the responder. The responder then displays the form to the user. Once a selection has been made, the action page notifies the domain to generate either the new question form, or display the thread. The result is passed to the responder for displaying. If a new question is submitted, or a new response is generated the system will then attempt to update the database with the new records. The thread that was updated/created will subsequently be generated by the domain and passed to the responder for viewing. 
+
+
+
+    3.3.4 User Account Settings
+        This page allows the user to view their user information and update any modifiable feilds. 
+        
+        3.3.4.1 Component Interface
+            Logic
+            -----
+            generateForm() -> Calls internal functions to generate the form. 
+            updateUserInfo() -> Attempts to update the user information in the database.
+            getUserInfo() -> Retreives the user information from the database
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(userinfo, navigation) -> Prints the side bar containing basic user information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.4.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system. The action page checks that a user has successfully logged in andredirects them to the login page if they are not. The domain queries the database for the current user's information before passing to the responder. The responder then displays the form to the user. Once a change has been made, the action page notifies the domain to update the database accordingly. Upon successful submission or cancelation, the user is redirected back to the home.
+
+            
+    3.3.5 Tutor Scheduling
+        Not to be confused with Tutor Schedules (3.3.2), this component modifies and generates the schedules displayed in the Tutor Schedules component.
+        
+        3.3.5.1 Component Interface
+            Logic
+            -----
+            generateForm() -> Calls internal functions to generate the form. 
+            genDepartment() -> Generates a dropdown for the user to choose the desired lab section.
+            querySchedule() -> Retreives the schedule from the database.
+            genCreate() -> Generates the form for creating a new entry.
+            updateEntry() -> Generates the form for updating an entry.
+            attemptCreate() -> Attempts to insert new entry into database.
+            attemptUpdate() -> Attempts to update the database entry.
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(userinfo, navigation) -> Prints the side bar containing basic user information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.5.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system and a user with the role of tutor or greater. The action page checks that a user has successfully logged in andredirects them to the login page if they are not. The domain queries the database for the current department schedule before passing to the responder. The responder then displays the form to the user. Once a change has been made, the action page notifies the domain to update the database accordingly. Upon successful submission or cancelation, the user is redirected back to the edit schedule page.
+
+
+    3.3.6 Manage Users
+        3.3.6.1 Component Interface
+            Logic
+            -----
+            displayAll() -> Calls internal functions to generate the base form with a listing of users. 
+            genEditForm() -> Generates a the edit user form to be displayed. Calls formattedUserInformation Internally.
+            formattedUserInformation() -> Fills the edit form with the user information.
+            generateTable() -> Formats list of users into a table listing of users.
+            getAccessLevelSelect(currentUserRole) -> creates a droptdown of available roles that the current user can assign.
+            getDepartmentList($currentDepartment) -> Creates a dropdown of available departments to assign the user to. 
+            filterRoleList(array) -> Processes array of available roles and returns the roles the current user is available to assign.
+            getDetailedUserInfo(userid) -> Pulls information of the user being edited.
+            getUserList() -> Queries database for list of users.
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(userinfo, navigation) -> Prints the side bar containing basic user information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.6.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system and a user with the role of staff or greater. The action page checks that a user has successfully logged in andredirects them to the login page if they are not. The domain queries the database for the current listing of users before passing to the responder. The responder then displays the form to the user. Once a the edit user button is clicked, the action page notifies the domain to generate the edit user form for the responder to display. Once an edit has been submitted the domain updates the database accordingly. Upon successful submission or cancelation, the user is redirected back to the edit user page.
+
+
+
+    3.3.7 Manage Classes
+        3.3.7.1 Component Interface
+            Logic
+            -----
+            displayAll() -> Calls internal functions to generate the base form with a listing of classes. 
+            genEditForm() -> Generates a the edit class form to be displayed. Calls formattedUserInformation Internally.
+            formattedClassInformation() -> Fills the edit form with the class information.
+            generateTable() -> Formats list of classes into a table listing of classes.
+            getDepartmentList($currentDepartment) -> Creates a dropdown of available departments to assign the class to. 
+            filterRoleList(array) -> Processes array of available roles and returns the roles the current class is available to assign.
+            getDetailedUserInfo(classid) -> Pulls information of the class being edited.
+            getClassList() -> Queries database for list of classes.
+            genCreate() -> Generates the page to create a new class.
+            attemptCreate() -> Attempts to insert new entry into database.
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(classinfo, navigation) -> Prints the side bar containing basic class information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.7.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system and a user with the role of staff or greater. The action page checks that a user has successfully logged in andredirects them to the login page if they are not. The domain queries the database for the current listing of classes before passing to the responder. The responder then displays the form to the user. If the edit class button is clicked, the action page notifies the domain to generate the edit class form for the responder to display. Once an edit has been submitted the domain updates the database accordingly. Upon successful submission or cancelation, the class is redirected back to the edit class page. If the add class button is clicked, the domain generates the create class form and passes it to the responder to display to the user. On a submit, the domain attempts to insert the record into the database. If successful or the user canceles sumbission at any point, the user is redirected to the manage classes page. 
+
+
+    3.3.8 Manage Class Sections
+        3.3.8.1 Component Interface
+            Logic
+            -----
+            displayAll() -> Calls internal functions to generate the base form with a listing of sections. 
+            genEditForm() -> Generates a the edit section form to be displayed. Calls formattedUserInformation Internally.
+            formattedsectionInformation() -> Fills the edit form with the section information.
+            generateTable() -> Formats list of sections into a table listing of sections.
+            getDepartmentList($currentDepartment) -> Creates a dropdown of available departments to assign the section to. 
+            filterRoleList(array) -> Processes array of available roles and returns the roles the current section is available to assign.
+            getDetailedUserInfo(sectionid) -> Pulls information of the section being edited.
+            getsectionList() -> Queries database for list of sections.
+            genCreate() -> Generates the page to create a new section.
+            attemptCreate() -> Attempts to insert new entry into database.
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(sectioninfo, navigation) -> Prints the side bar containing basic section information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.8.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system and a user with the role of admin or greater. The action page checks that a user has successfully logged in andredirects them to the login page if they are not. The domain queries the database for the current listing of sections before passing to the responder. The responder then displays the form to the user. If the edit section button is clicked, the action page notifies the domain to generate the edit section form for the responder to display. Once an edit has been submitted the domain updates the database accordingly. Upon successful submission or cancelation, the section is redirected back to the edit section page. If the add section button is clicked, the domain generates the create section form and passes it to the responder to display to the user. On a submit, the domain attempts to insert the record into the database. If successful or the user canceles sumbission at any point, the user is redirected to the manage sections page. 
+
+        
+    3.3.9 Manage Terms
+        3.3.9.1 Component Interface
+            Logic
+            -----
+            displayAll() -> Calls internal functions to generate the base form with a listing of terms. 
+            genEditForm() -> Generates a the edit term form to be displayed. Calls formattedUserInformation Internally.
+            formattedtermInformation() -> Fills the edit form with the term information.
+            generateTable() -> Formats list of terms into a table listing of terms.
+            filterRoleList(array) -> Processes array of available roles and returns the roles the current term is available to assign.
+            getDetailedUserInfo(termid) -> Pulls information of the term being edited.
+            gettermList() -> Queries database for list of terms.
+            genCreate() -> Generates the page to create a new term.
+            attemptCreate() -> Attempts to insert new entry into database.
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(terminfo, navigation) -> Prints the side bar containing basic term information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.9.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system and a user with the role of sysadmin or greater. The action page checks that a user has successfully logged in andredirects them to the login page if they are not. The domain queries the database for the current listing of terms before passing to the responder. The responder then displays the form to the user. If the edit term button is clicked, the action page notifies the domain to generate the edit term form for the responder to display. Once an edit has been submitted the domain updates the database accordingly. Upon successful submission or cancelation, the term is redirected back to the edit term page. If the add term button is clicked, the domain generates the create term form and passes it to the responder to display to the user. On a submit, the domain attempts to insert the record into the database. If successful or the user canceles sumbission at any point, the user is redirected to the manage terms page. 
+            
+            
+    3.3.10 Reporting
+        This component displays the current available reports.
+        
+        3.3.10.1 Component Interface
+            Logic
+            -----
+            generateForm() -> Calls internal functions to generate the form. 
+            genDepartment() -> Generates a dropdown for the user to choose the desired report.
+            queryReport() -> Retreives the data from the database
+            gernarateReportxxxx() -> Gernates xxxx report form
+            -----
+            
+            Display
+            -----
+            printHeader() -> Prints static html code for the page start.
+            printStartBody() -> Prints static html code for the opening body tags.
+            printPortalHead() -> Prints the visible header bar for the portal.
+            printSideBar(userinfo, navigation) -> Prints the side bar containing basic user information and navigation bar.
+            printForm(html, error) -> Takes the dynamic html registration form and generated errors. Inserts dynamic code into static code and prints.
+            printEndBody() -> Prints static html code for closing the page.
+            -----
+        
+        3.3.10.2 Component Design Description
+            This page is accessable from any location by a valid user. A valid user for this page is defined as a user who has successfully logged in via the portal system and a user with the role of sysadmin or greater. The action page checks that a user has successfully logged in andredirects them to the login page if they are not. The action page checks that a user has successfully logged in and redirects them to the login page if they are not. The domain queries the database for a list of reports and generates a dropdown populated with the report names for the responder. The responder then displays the form containing the report to the user. If a new form is selected, the action page notifies the domain to create the newly requested form. The result is passed to the responder for displaying. This action is repeatable indefinately by the user. 
+            
+
+
+    3.3.x WorkFlow
+        
