@@ -116,13 +116,13 @@ create domain termcode as char(6);
 create table terms (
 	code termcode  NOT NULL,
 	
-	active boolean NOT NULL,
+	activeterm boolean NOT NULL,
 
 	primary key(code)
 );
 
 -- Ensure that at most one term can be marked as active
-create unique_index on terms(active) where active = true;
+create unique_index on terms(activeterm) where activeterm = true;
 
 -- List of all sections of classes.
 create table sections (
@@ -180,6 +180,8 @@ create table questions (
 
 	status question_status NOT NULL,
 
+	added timestamp     NOT NULL;
+
 	primary key(quid),
 
 	foreign key(subject) references sections(secid),
@@ -197,10 +199,26 @@ create table posts (
 	-- True if this post is a question, false if this quest is an answer
 	is_question boolean NOT NULL,
 
+	added timestamp     NOT NULL;
+
 	primary key(postid, question),
 
 	foreign key(question) references questions(quid),
 	foreign key(author)   references users(idno)
+);
+
+-- List of when tutors are available to be scheduled
+create table availability (
+	student userid,
+	dept    deptid,
+
+	starttime timestamp NOT NULL,
+	endtime   timestamp NOT NULL,
+
+	primary key(student, dept),
+
+	foreign key(student) references users(idno),
+	foreign key(dept) references departments(deptid)
 );
 
 -- List of when tutors are scheduled to be active
@@ -216,29 +234,6 @@ create table schedules (
 	foreign key(student) references users(idno),
 	foreign key(dept) references departments(deptid)
 );
--------------------------------------------------
--- VIEW DEFINITIONS
--------------------------------------------------
-create view dept_stats as (
-    with class_counts as (
-        select departments.deptid, count(classes.cid) as classcount
-        from departments left outer join classes on (
-            departments.deptid = classes.dept
-        )
-        group by departments.deptid
-    ), prof_counts as (
-        select departments.deptid, count(filt_users.idno) as profcount
-        from departments left outer join (select * from users where users.role >= 'staff'::role) as filt_users on (
-            departments.deptid = filt_users.deptid
-        )
-        group by departments.deptid
-    )
-    SELECT departments.deptid, departments.deptname, class_counts.classcount, prof_counts.profcount
-    FROM departments JOIN class_counts ON
-    ( departments.deptid = class_counts.deptid )
-    join prof_counts on
-    (departments.deptid = prof_counts.deptid)
-);
 
 -- Department lab constraints
 create table deptlabs (
@@ -250,7 +245,66 @@ create table deptlabs (
 	primary key(dept),
 
 	foreign key(dept) references departments(deptid)
-)
+);
+
+-------------------------------------------------
+-- VIEW DEFINITIONS
+-------------------------------------------------
+-- All of the sections for the current term
+CREATE VIEW term_sections AS (
+	SELECT * FROM sections WHERE sections.term =
+		(SELECT terms.code FROM terms WHERE terms.activeterm = true)
+);
+
+CREATE VIEW staff_users AS (
+	SELECT * FROM users WHERE users.role >= 'staff'::role
+);
+
+-- Provide class/professor counts for departments
+CREATE VIEW dept_stats AS (
+	WITH class_counts AS (
+		SELECT COUNT(classes.cid) AS classcount, classes.dept
+			FROM classes
+			GROUP BY classes.dept
+	), prof_counts AS (
+		SELECT staff_users.deptid, COUNT(staff_users.idno) AS profcount
+			FROM staff_users 
+			GROUP BY staff_users.deptid
+	)
+	SELECT departments.deptid, departments.deptname, 
+		COALESCE(class_counts.classcount, 0) AS class_count,
+		COALESCE(prof_counts.profcount, 0)   AS prof_count
+		FROM departments
+		LEFT OUTER JOIN class_counts ON (departments.deptid = class_counts.dept)
+		LEFT OUTER JOIN prof_counts  ON (departments.deptid = prof_counts.deptid)
+		ORDER BY departments.deptname
+);
+
+-- This query will select all of the departments that have at least one question
+-- attached to them
+CREATE VIEW forum_overview AS (
+	SELECT departments.deptid, departments.deptname,
+		COUNT(questions.quid) AS question_count,
+		COUNT(questions.quid) FILTER 
+			(WHERE questions.status = 'awaiting_response') AS unanswered_count
+		FROM departments
+		LEFT JOIN classes       ON departments.deptid  = classes.dept
+		LEFT JOIN term_sections ON classes.cid         = term_sections.cid
+		LEFT JOIN questions     ON term_sections.secid = questions.subject
+		GROUP BY departments.deptid ORDER BY departments.deptname
+);
+
+CREATE VIEW student_total_usage AS (
+	-- Get the total number of hours each student is using per section
+	SELECT users.idno, users.realname, users.role,
+		SUM(usage.markout - usage.markin) as total_hours
+		FROM usage
+		JOIN term_sections ON usage.secid   = term_sections.secid
+		JOIN users         ON usage.student = users.idno
+		WHERE usage.markout IS NOT NULL
+		GROUP BY usage.student, users.realname, users.role, users.idno
+		ORDER BY users.role, users.realname;
+);
 -- @TODO 10/16/17 Ben Culkin :DBSchema
 --	Add constraints where appropriate to the schema.
 --
