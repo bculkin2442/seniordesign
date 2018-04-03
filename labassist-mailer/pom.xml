@@ -22,7 +22,7 @@
 		<main.class>wvutech.mailer.Mailer</main.class>
 		<main.class1>wvutech.mailer.MailerGen</main.class1>
 		<main.class2>wvutech.mailer.DemoMailer</main.class2>
-		<main.class2>wvutech.mailer.SessionCloser</main.class2>
+		<main.class3>wvutech.mailer.SessionCloser</main.class3>
 	</properties>
 
 	<licenses>
@@ -55,7 +55,7 @@
 
 					<archive>
 						<manifest>
-							<mainClass>${main.class}</mainClass>
+							<mainClass>${main.class3}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

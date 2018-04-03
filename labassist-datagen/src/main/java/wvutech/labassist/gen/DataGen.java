@@ -76,10 +76,13 @@ public class DataGen {
 			List<wvutech.labassist.beans.Class> classes, List<TermCode> codes) {
 		for(wvutech.labassist.beans.Class clasz : classes) {
 			for(TermCode term : codes) {
-				generateSection(0, cid, user, term);
+				//generateSection(0, cid, user, term);
 			}
 		}
+
+		return null;
 	}
+
 	private static List<wvutech.labassist.beans.Class> generateClasses(int noClasses, Connection c,
 		List<Department> depts) throws Exception {
 		PreparedStatement stmt = c.prepareStatement("insert into classes (dept, name) values (?, ?)");
@@ -125,7 +128,7 @@ public class DataGen {
 			try(Connection c = DriverManager.getConnection(CONN_STRING, "labassist", "labassist")) {
 				c.setAutoCommit(false);
 
-				List<TermCode> codes = generateTermCodes(SCALE, C);
+				List<TermCode> codes = null;// = generateTermCodes(SCALE, c);
 
 				List<Department> depts = generateDepartments(SCALE, c);
 
