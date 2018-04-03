@@ -17,6 +17,8 @@ import javax.mail.internet.MimeMessage;
  */
 public class Mailer {
 	public static void main(String[] args) {
+		System.out.println("Starting mailer session");
+
 		/* Open mail session. */
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.wvu.edu");
@@ -56,5 +58,7 @@ public class Mailer {
 				mex.printStackTrace();
 			}
 		}
+
+		System.out.printf("Sent %d messages\n", nmsg);
 	}
 }
