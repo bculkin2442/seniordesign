@@ -1,7 +1,7 @@
 {recipient},
 	There are {nquestions} questions waiting for you:
 
-{questions}
+	{questions}
 
 	Log onto the system to view them.
 

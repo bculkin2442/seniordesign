@@ -55,7 +55,7 @@
 
 					<archive>
 						<manifest>
-							<mainClass>${main.class3}</mainClass>
+							<mainClass>${main.class}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

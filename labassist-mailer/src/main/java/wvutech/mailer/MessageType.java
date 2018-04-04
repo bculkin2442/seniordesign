@@ -112,7 +112,7 @@ public enum MessageType {
 						return srcString;
 					}
 
-					return String.format("%s\n%s", srcString, destString);
+					return String.format("%s\n\t%s", srcString, destString);
 				});
 			}
 			return;
