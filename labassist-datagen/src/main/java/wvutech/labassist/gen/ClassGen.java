@@ -1,10 +1,8 @@
 package wvutech.labassist.gen;
 
-import bjc.rgens.newparser.RGrammars;
+import bjc.rgens.parser.RGrammars;
 
 import wvutech.labassist.beans.Class;
-import wvutech.labassist.beans.Department;
-
 import wvutech.labassist.beans.Department.DepartmentID;
 
 public class ClassGen {

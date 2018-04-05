@@ -9,9 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import bjc.rgens.newparser.GrammarException;
-import bjc.rgens.newparser.RGrammars;
-
 import wvutech.labassist.beans.*;
 
 /**

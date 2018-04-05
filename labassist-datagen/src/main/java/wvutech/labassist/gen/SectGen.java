@@ -1,6 +1,6 @@
 package wvutech.labassist.gen;
 
-import bjc.rgens.newparser.RGrammars;
+import bjc.rgens.parser.RGrammars;
 
 import wvutech.labassist.beans.Section;
 import wvutech.labassist.beans.User;

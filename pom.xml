@@ -25,8 +25,8 @@
 				<version>1.5.0</version>
 
 				<executions>
-					<execution>
-						<!-- Run ctags -->
+					<!-- <execution>
+						<!- Run ctags >
 						<id>source tagging</id>
 						<phase>generate-sources</phase>
 
@@ -41,7 +41,7 @@
 								<argument>-R</argument>
 							</arguments>
 						</configuration>
-					</execution>
+					</execution> -->
 				</executions>
 			</plugin>
 		</plugins>
