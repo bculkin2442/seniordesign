@@ -173,6 +173,7 @@ create type question_status as enum (
 create table questions (
 	quid serial,
 
+	term    termcode       NOT NULL,
 	subject int            NOT NULL,
 
 	title varchar(255)     NOT NULL,
@@ -184,8 +185,9 @@ create table questions (
 
 	primary key(quid),
 
+	foreign key(term)    references terms(code),
 	foreign key(subject) references sections(secid),
-	foreign key(asker) references users(idno)
+	foreign key(asker)   references users(idno)
 );
 
 -- List of all of the posts for questions
@@ -256,6 +258,7 @@ CREATE VIEW term_sections AS (
 		(SELECT terms.code FROM terms WHERE terms.activeterm = true)
 );
 
+-- All of the users that are staff
 CREATE VIEW staff_users AS (
 	SELECT * FROM users WHERE users.role >= 'staff'::role
 );
@@ -280,9 +283,9 @@ CREATE VIEW dept_stats AS (
 		ORDER BY departments.deptname
 );
 
--- This query will select all of the departments that have at least one question
--- attached to them
 CREATE VIEW forum_overview AS (
+	-- This query will select all of the departments that have at least one question
+	-- attached to them
 	SELECT departments.deptid, departments.deptname,
 		COUNT(questions.quid) AS question_count,
 		COUNT(questions.quid) FILTER 
@@ -305,6 +308,7 @@ CREATE VIEW student_total_usage AS (
 		GROUP BY usage.student, users.realname, users.role, users.idno
 		ORDER BY users.role, users.realname;
 );
+
 -- @TODO 10/16/17 Ben Culkin :DBSchema
 --	Add constraints where appropriate to the schema.
 --
