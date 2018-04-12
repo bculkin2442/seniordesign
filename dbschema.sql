@@ -173,6 +173,7 @@ create type question_status as enum (
 create table questions (
 	quid serial,
 
+	term    termcode       NOT NULL,
 	subject int            NOT NULL,
 
 	title varchar(255)     NOT NULL,
@@ -184,8 +185,9 @@ create table questions (
 
 	primary key(quid),
 
+	foreign key(term)    references terms(code),
 	foreign key(subject) references sections(secid),
-	foreign key(asker) references users(idno)
+	foreign key(asker)   references users(idno)
 );
 
 -- List of all of the posts for questions
