@@ -286,15 +286,18 @@ CREATE VIEW dept_stats AS (
 CREATE VIEW forum_overview AS (
 	-- This query will select all of the departments that have at least one question
 	-- attached to them
+	WITH filt_questions AS (
+		SELECT * from questions WHERE questions.term = (SELECT code FROM terms WHERE activeterm = true)
+	)
 	SELECT departments.deptid, departments.deptname,
-		COUNT(questions.quid) AS question_count,
-		COUNT(questions.quid) FILTER 
-			(WHERE questions.status = 'awaiting_response') AS unanswered_count
+		COUNT(filt_questions.quid) AS question_count,
+		COUNT(filt_questions.quid) FILTER 
+			(WHERE filt_questions.status = 'awaiting_response') AS unanswered_count
 		FROM departments
-		LEFT JOIN classes       ON departments.deptid  = classes.dept
-		LEFT JOIN term_sections ON classes.cid         = term_sections.cid
-		LEFT JOIN questions     ON term_sections.secid = questions.subject
-		GROUP BY departments.deptid ORDER BY departments.deptname
+		LEFT JOIN classes        ON departments.deptid = classes.dept
+		LEFT JOIN filt_questions ON classes.cid        = filt_questions.subject
+		GROUP BY departments.deptid
+		ORDER BY departments.deptname
 );
 
 CREATE VIEW student_total_usage AS (
