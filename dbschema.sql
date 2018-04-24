@@ -217,6 +217,8 @@ create table availability (
 	starttime timestamp NOT NULL,
 	endtime   timestamp NOT NULL,
 
+	term termcode       NOT NULL,
+
 	primary key(student, dept),
 
 	foreign key(student) references users(idno),
@@ -231,6 +233,8 @@ create table schedules (
 	starttime timestamp NOT NULL,
 	endtime   timestamp NOT NULL,
 
+	term termcode       NOT NULL,
+	
 	primary key(student, dept),
 
 	foreign key(student) references users(idno),
