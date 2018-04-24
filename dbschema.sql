@@ -152,7 +152,9 @@ create table usage (
 	primary key(student, secid, markin),
 
 	foreign key(student) references users(idno),
-	foreign key(secid)   references sections(secid)
+	foreign key(secid)   references sections(secid),
+
+	check(markin < markout)
 );
 
 -- @NOTE
