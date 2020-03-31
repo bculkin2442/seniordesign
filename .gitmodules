@@ -1,0 +1,3 @@
+[submodule "labassist-web"]
+	path = labassist-web
+	url = ./labassist-web
