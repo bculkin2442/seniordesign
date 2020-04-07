@@ -1,12 +1,5 @@
 package wvutech.labassist.gen;
 
-import bjc.rgens.parser.RGrammars;
-
-import wvutech.labassist.beans.Section;
-import wvutech.labassist.beans.User;
-
-import static wvutech.labassist.beans.User.UserID;
-
 public class SectGen {
 	/*public static Section generateSection(int sid, int cid, UserID user, TermCode term) {
 		String sectCode = RGrammars.generateExport("[section-code]");

@@ -18,9 +18,8 @@ public enum MessageType {
 	/**
 	 * There is a question awaiting a response.
 	 *
-	 * Could be either
-	 * - A question awaiting an answer.
-	 * - A question with an unread answer.
+	 * Could be either - A question awaiting an answer. - A question with an unread
+	 * answer.
 	 */
 	PENDING_QUESTION,
 	/**
@@ -29,7 +28,7 @@ public enum MessageType {
 	SCHEDULE_CHANGED;
 
 	public String getSubject() {
-		switch(this) {
+		switch (this) {
 		case AUTOCLOCK:
 			return "[LabAssist] Automatic Clockout";
 		case PENDING_QUESTION:
@@ -46,75 +45,75 @@ public enum MessageType {
 
 		StringBuilder sb = new StringBuilder();
 
-		Scanner scn = new Scanner(strem);
-
-		while(scn.hasNextLine()) {
-			sb.append(scn.nextLine());
-			sb.append("\n");
+		try (Scanner scn = new Scanner(strem)) {
+			while (scn.hasNextLine()) {
+				sb.append(scn.nextLine());
+				sb.append("\n");
+			}
 		}
-
+		
 		return sb.toString();
 	}
 
 	public void mergeVars(Map<String, String> src, Map<String, String> dest) {
-		switch(this) {
-		case PENDING_QUESTION:
-			{
-				String recipient  = src.get("recipient");
-				String nquestions = src.get("nquestions");
-				String questions  = src.get("questions");
+		switch (this) {
+		case PENDING_QUESTION: {
+			String recipient = src.get("recipient");
+			String nquestions = src.get("nquestions");
+			String questions = src.get("questions");
 
-				if(recipient  == null) recipient  = "";
-				if(nquestions == null) nquestions = "0";
-				if(questions  == null) questions  = "";
+			if (recipient == null)
+				recipient = "";
+			if (nquestions == null)
+				nquestions = "0";
+			if (questions == null)
+				questions = "";
 
-				dest.merge("recipient", recipient, (srcString, destString) -> {
-					if(srcString == null) {
-						if(destString == null) {
-							return "";
-						}
-
-						return destString;
-					} else if (destString == null) {
-						return srcString;
+			dest.merge("recipient", recipient, (srcString, destString) -> {
+				if (srcString == null) {
+					if (destString == null) {
+						return "";
 					}
 
-					return String.format("%s ; %s", srcString, destString);
-				});
+					return destString;
+				} else if (destString == null) {
+					return srcString;
+				}
 
-				dest.merge("nquestions", nquestions, (srcString, destString) -> {
-					if(srcString == null) {
-						if(destString == null) {
-							return "0";
-						}
+				return String.format("%s ; %s", srcString, destString);
+			});
 
-						return destString;
-					} else if(destString == null) {
-						return srcString;
+			dest.merge("nquestions", nquestions, (srcString, destString) -> {
+				if (srcString == null) {
+					if (destString == null) {
+						return "0";
 					}
 
-					/*
-					 * @NOTE
-					 * this'll fail for improperly formatted
-					 * nquestion bvars.
-					 */
-					return String.format("%d", Integer.parseInt(srcString) + Integer.parseInt(destString));
-				});
+					return destString;
+				} else if (destString == null) {
+					return srcString;
+				}
 
-				dest.merge("questions", questions, (srcString, destString) -> {
-					if(srcString == null) {
-						if(destString == null) {
-							return "";
-						}
+				/*
+				 * @NOTE this'll fail for improperly formatted nquestion bvars.
+				 */
+				return String.format("%d", Integer.parseInt(srcString) + Integer.parseInt(destString));
+			});
 
-						return destString;
-					} else if (destString == null) {
-						return srcString;
+			dest.merge("questions", questions, (srcString, destString) -> {
+				if (srcString == null) {
+					if (destString == null) {
+						return "";
 					}
 
-					return String.format("%s\n\t%s", srcString, destString);
-				});
-			}
+					return destString;
+				} else if (destString == null) {
+					return srcString;
+				}
+
+				return String.format("%s\n\t%s", srcString, destString);
+			});
+		}
 			return;
 		case SCHEDULE_CHANGED:
 			return;

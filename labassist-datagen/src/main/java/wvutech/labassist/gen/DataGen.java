@@ -21,6 +21,7 @@ public class DataGen {
 
 	private static final String CONN_STRING = "jdbc:postgresql://localhost:5432/labassist";
 
+	@SuppressWarnings("unused")
 	private static List<TermCode> generateTermCode(int noCodes, Connection c) throws Exception {
 		PreparedStatement stmt = c.prepareStatement("insert into  terms (code) values (?::termcode)");
 
@@ -44,6 +45,7 @@ public class DataGen {
 
 		return list;
 	}
+	
 	private static List<Department> generateDepartments(int noDepts, Connection c) throws Exception {
 		PreparedStatement stmt = c.prepareStatement("insert into departments (deptid, deptname) values (?, ?)");
 
@@ -60,6 +62,8 @@ public class DataGen {
 			stmt.addBatch();
 		}
 
+		// TODO: handle possible errors and stuff
+		@SuppressWarnings("unused")
 		int[] res = stmt.executeBatch();
 
 		c.commit();
@@ -69,6 +73,7 @@ public class DataGen {
 		return list;
 	}
 
+	@SuppressWarnings("unused")
 	private static List<Section> generateSections(int noSections, Connection c,
 			List<wvutech.labassist.beans.Class> classes, List<TermCode> codes) {
 		for(wvutech.labassist.beans.Class clasz : classes) {
@@ -95,6 +100,8 @@ public class DataGen {
 			}
 		}
 
+		// TODO: handle possible errors and stuff
+		@SuppressWarnings("unused")
 		int[] res = stmt.executeBatch();
 
 		c.commit();
@@ -131,6 +138,8 @@ public class DataGen {
 
 				List<wvutech.labassist.beans.Class> classes = generateClasses(SCALE, c, depts);
 
+				// TODO: need this for future stuffs
+				@SuppressWarnings("unused")
 				List<Section> sections = generateSections(SCALE, c, classes, codes);
 			} catch (Exception ex) {
 				System.out.println("ERROR: Something went wrong (doing stuff with database)");
