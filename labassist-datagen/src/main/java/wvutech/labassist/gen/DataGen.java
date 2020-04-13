@@ -125,6 +125,10 @@ public class DataGen {
 		return list;
 	}
 
+	/**
+	 * Main routine for the data generator
+	 * @param args Ignored CLI args
+	 */
 	public static void main(String[] args) {
 		try {
 			java.lang.Class.forName("org.postgresql.Driver");

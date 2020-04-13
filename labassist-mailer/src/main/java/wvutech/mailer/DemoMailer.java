@@ -15,6 +15,10 @@ import javax.mail.internet.MimeMessage;
  * @author Ben Culkin
  */
 public class DemoMailer {
+	/**
+	 * Main routine for mailer.
+	 * @param args Ignored CLI args
+	 */
 	public static void main(String[] args) {
 		/* Open mail session. */
 		Properties props = new Properties();
